@@ -4,7 +4,15 @@ const mentorSchema = mongoose.Schema({
         type:String,
         required:false
     },
-    mentorExams:{
+    mentorName:{
+        type:String,
+        required:false
+    },
+    mentorEmail:{
+        type:String,
+        required:false
+    },
+    mentorContact:{
         type:String,
         required:false
     },
@@ -93,11 +101,36 @@ achievements:[{
         required:false
     }
 }],
-mentorChats:{
+statistics:{
+    countMentored:{
+        type:Number,
+        required:false
+    },
+    countSessions:{
+        type:Number,
+        required:false
+    }
+},
+rating:{
+    type:Number,
+    required:false
+},
+mentorImage:{
     type:String,
     required:false
+},
+mentorTagline:{
+    type:String,
+    required:false
+},
+mentorChats:{
+    type:[String],
+    required:false
+},
+reviewsGot:{
+    type:[String],
+    required:false
 }
-
 
 
 

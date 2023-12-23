@@ -3,7 +3,8 @@ import bcrypt from 'bcrypt';
 import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken'
 import token from '../model/token-schema.js'
-
+import Mentor from "../model/mentor-schema.js";
+import Student from "../model/student-schema.js";
 
 export const signupUserController = async(request, response) => {
     try {
@@ -11,10 +12,33 @@ export const signupUserController = async(request, response) => {
         const hashedPassword = await bcrypt.hash(request.body.password, 10);
         
         const user = {username: request.body.username, password: hashedPassword, role:request.body.role};
-        console.log(user)
         const newUser = new User(user);
         await newUser.save();
-        
+        if(newUser.role === 'mentor'){
+            const newMentor = new Mentor({
+                mentorAccountId:newUser._id,
+                mentorName:'',
+                mentorEmail:'',
+                mentorContact:'',
+                rating:0,
+                mentorTagline:'',
+                mentorExams:[],
+                mentorSubjects:[],
+                mentorFollowers:[],
+                mentorPosts:[],
+                mentorPlans:[],
+                education:[],
+                workExperiences:[],
+                achievements:[],
+                reviewsGot:[],
+                mentorChats:[],
+                statistics:{},
+                
+                
+            })
+            console.log(newMentor)
+            await newMentor.save();
+        }
         return response.status(200).json({temp, msg:'signup successfull'})
     } catch (error) {
         return response.status(500).json(error);

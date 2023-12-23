@@ -7,10 +7,11 @@ import MentorHome from './components/home/MentorHome';
 import { Route } from 'react-router-dom';
 import {BrowserRouter, Routes} from 'react-router-dom';
 import Header from './components/header/Header';
+import MentorProfile from './components/profile/MentorProfile';
 
 function App() {
   return (
-    <div style={{marginTop:64}}>
+    
           <DataProvider>
         <BrowserRouter>
           <Header/>
@@ -20,12 +21,12 @@ function App() {
               <Route  path = '/student/home' element = {<StudentHome/>}/>
               <Route  path = '/mentor/home' element = {<MentorHome/>}/>
               <Route  path = '/login' element = {<Login/>}/>
-              
+              <Route  path = '/mentor/profile' element = {<MentorProfile/>}/>
             </Routes>
           </div>
         </BrowserRouter>
      </DataProvider>
-    </div>
+    
   );
 }
 

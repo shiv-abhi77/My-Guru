@@ -61,6 +61,14 @@ const studentSchema = mongoose.Schema({
     studentChats:{
         type:[String],
         required:false
+    },
+    reviewsPosted:{
+        type:[String],
+        required:false
+    },
+    ratingGiven:{
+        type:[String],
+        required:false
     }
 
 

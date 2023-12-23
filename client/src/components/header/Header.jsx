@@ -125,7 +125,7 @@ export default function Header() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={() => {account.role === 'mentor'?navigate(`/mentor/profile`):navigate('/student/profile')}}>Profile</MenuItem>
+      <MenuItem onClick={() => {account.role === 'mentor'?navigate(`/mentor/profile/`):navigate('/student/profile')}}>Profile</MenuItem>
       <MenuItem onClick={() => { if(location.pathname.includes('login') === false) setAccount({username :'', loggedIn:false, id:'', role:''}); navigate('/login')}}>Logout</MenuItem>
     </Menu>
   );
@@ -360,9 +360,9 @@ export default function Header() {
       {renderMobileMenu}
       {renderMenu}
     </Box>
-    {
+    {/* {
       account.role === 'student'?<StudentSidebar/>:<MentorSidebar/>
-    }
+    } */}
     
     </Box>
       
