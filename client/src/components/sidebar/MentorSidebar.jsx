@@ -78,7 +78,7 @@ export default function MentorSidebar() {
               
               :
               index === 2 ?
-              <ListItemButton onClick={() => { if(location.pathname.includes('/mentor/yourposts') === false) navigate('/mentor/yourposts')}} >
+              <ListItemButton onClick={() => { if(location.pathname.includes('/mentor/posts') === false) navigate('/mentor/posts')}} >
                 <ListItemIcon style={{ color: '#00ecff' }} >
                    <DynamicFeedIcon/>
                 </ListItemIcon>

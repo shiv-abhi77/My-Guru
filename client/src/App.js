@@ -8,6 +8,8 @@ import { Route } from 'react-router-dom';
 import {BrowserRouter, Routes} from 'react-router-dom';
 import Header from './components/header/Header';
 import MentorProfile from './components/profile/MentorProfile';
+import MentorPosts from './components/posts/MentorPosts';
+import CreatePost from './components/posts/CreatePost';
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
               <Route  path = '/mentor/home' element = {<MentorHome/>}/>
               <Route  path = '/login' element = {<Login/>}/>
               <Route  path = '/mentor/profile' element = {<MentorProfile/>}/>
+              <Route  path = '/mentor/posts' element = {<MentorPosts/>}/>
+              <Route  path = '/mentor/createpost' element = {<CreatePost/>}/>
             </Routes>
           </div>
         </BrowserRouter>

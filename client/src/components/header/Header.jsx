@@ -281,7 +281,7 @@ export default function Header() {
     <div></div>
     :
     <Box sx={{ display: "flex" }}>
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1}}>
       <AppBar  position="fixed"
         sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }} style={{backgroundColor:"#131c30"}}>
         <Toolbar>
