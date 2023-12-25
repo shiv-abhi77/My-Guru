@@ -54,7 +54,7 @@ export default function MentorSidebar() {
         
       <Divider style={{backgroundColor:'#00ecff'}} />
         <List>
-          {["Home","Your Students", "Your Posts", "Create Post", "Your Plans", "Go Live"].map((text, index) => (
+          {["Home","Your Students", "Your Posts", "Your Plans", "Go Live"].map((text, index) => (
             <ListItem key={text} disablePadding>
 
 
@@ -86,14 +86,6 @@ export default function MentorSidebar() {
               </ListItemButton>
               :
               index === 3 ?
-              <ListItemButton onClick={() => { if(location.pathname.includes('/mentor/createpost') === false) navigate('/mentor/createpost')}} >
-                <ListItemIcon style={{ color: '#00ecff' }} >
-                   <AddCircleIcon/>
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-              :
-              index === 4 ?
               <ListItemButton onClick={() => { if(location.pathname.includes('/mentor/yourplans') === false) navigate('/mentor/yourplans')}} >
                 <ListItemIcon style={{ color: '#00ecff' }} >
                    <WorkIcon/>
@@ -101,7 +93,7 @@ export default function MentorSidebar() {
                 <ListItemText primary={text} />
               </ListItemButton>
               :
-              index === 5 ?
+              index === 4 ?
               <ListItemButton onClick={() => { if(location.pathname.includes('/mentor/golive') === false) navigate('/mentor/golive')}} >
                 <ListItemIcon style={{ color: '#00ecff' }} >
                    <LiveTvIcon/>

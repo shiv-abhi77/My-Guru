@@ -51,8 +51,9 @@ const MentorPost = ({post, saved, mentorName, mentorTagline, mentorImage}) => {
          console.log(settings.body)
          const fetchResponse = await fetch(`http://localhost:8000/updatepost?postId=${postId}`, settings);
          const response = await fetchResponse.json();
-        setPost(tempPostState)
          
+        setPost(tempPostState)
+        handleClose()
      } catch (e) {
          
          return e;
@@ -165,12 +166,20 @@ const MentorPost = ({post, saved, mentorName, mentorTagline, mentorImage}) => {
                         color:"rgba(0, 0, 0, 0.6)"
                     }}>
                         Posted {
-                            Math.abs(new Date(postState.postTimestamp).getDate() - new Date().getDate()) === 0?
+                            Math.abs(new Date(postState.postTimestamp).getFullYear() - new Date().getFullYear()) === 0?
+                            Math.abs(new Date(postState.postTimestamp).getMonth() - new Date().getMonth()) === 0 ?
+                            Math.abs(new Date(postState.postTimestamp).getMinutes() - new Date().getMinutes()) === 0 ?
+                            Math.abs(new Date(postState.postTimestamp).getSeconds() - new Date().getSeconds()) :
+                            Math.abs(new Date(postState.postTimestamp).getMinutes() - new Date().getMinutes()) :
+                            Math.abs(new Date(postState.postTimestamp).getHours() - new Date().getHours()):
+                            Math.abs(new Date(postState.postTimestamp).getDate() - new Date().getDate()) === 1 ?
+                            Math.abs(new Date(postState.postTimestamp).getHours() - new Date().getHours()) < 24 ?
                             Math.abs(new Date(postState.postTimestamp).getHours() - new Date().getHours()) === 0 ?
                             Math.abs(new Date(postState.postTimestamp).getMinutes() - new Date().getMinutes()) === 0 ?
                             Math.abs(new Date(postState.postTimestamp).getSeconds() - new Date().getSeconds()) :
                             Math.abs(new Date(postState.postTimestamp).getMinutes() - new Date().getMinutes()) :
                             Math.abs(new Date(postState.postTimestamp).getHours() - new Date().getHours()):
+                            '1':
                             Math.abs(new Date(postState.postTimestamp).getDate() - new Date().getDate()) < 7 ?
                             Math.abs(new Date(postState.postTimestamp).getDate() - new Date().getDate()) :
                             Math.abs(new Date(postState.postTimestamp).getDate() - new Date().getDate()) < 30 ?
@@ -185,8 +194,16 @@ const MentorPost = ({post, saved, mentorName, mentorTagline, mentorImage}) => {
                             ' sec' :
                             ' min' :
                             ' hr':
-                            Math.abs(new Date(postState.postTimestamp).getDate() - new Date().getDate()) < 7 ?
+                            Math.abs(new Date(postState.postTimestamp).getDate() - new Date().getDate()) === 1 ?
+                            Math.abs(new Date(postState.postTimestamp).getHours() - new Date().getHours()) < 24 ?
+                            Math.abs(new Date(postState.postTimestamp).getHours() - new Date().getHours()) === 0 ?
+                            Math.abs(new Date(postState.postTimestamp).getMinutes() - new Date().getMinutes()) === 0 ?
+                            ' sec' :
+                            ' min' :
+                            ' hr':
                             ' days' :
+                            Math.abs(new Date(postState.postTimestamp).getDate() - new Date().getDate()) < 7 ?
+                            ' weeks':
                             Math.abs(new Date(postState.postTimestamp).getDate() - new Date().getDate()) < 30 ?
                             ' weeks' :
                             Math.abs(new Date(postState.postTimestamp).getDate() - new Date().getDate()) < 365 ?
