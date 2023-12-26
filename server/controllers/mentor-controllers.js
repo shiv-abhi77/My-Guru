@@ -88,6 +88,34 @@ export const getPostsController = async(request, response) => {
         return response.status(500).json('failed posts fetching');
     }
 }
+export const getAllPostsExceptYoursController = async(request, response) => {
+
+    try{
+        let result = []
+        let objArrayOfPosts = [];
+        objArrayOfPosts = await Post.find({});
+        for(let i = 0;i<objArrayOfPosts.length;i++){
+            if(objArrayOfPosts[i].postAccountId !== request.query.mentorAccountId){
+                let temp = await Mentor.findOne({mentorAccountId:objArrayOfPosts[i].postAccountId});
+                
+                if(temp){
+                    result.push({
+                        post:objArrayOfPosts[i],
+                        mentorName:temp.mentorName,
+                        mentorTagline:temp.mentorTagline,
+                        mentorImage:temp.mentorImage,
+                        
+                    })
+                }
+            }
+        }
+        // let mentor = await Mentor.findOne({mentorAccountId:request.query.mentorAccountId});
+        return response.status(200).json({result});
+
+    }catch(error){
+        return response.status(500).json('failed posts fetching');
+    }
+}
 
 export const createCommentController = async(request, response) => {
     
@@ -180,9 +208,11 @@ export const getLikesController = async(request, response) => {
 
     try{
         let objArrayOfLikes = [];
-        for(let i = 0; i<request.query.postLikes;i++){
-                let user = await Mentor.findOne({mentorAccountId:request.query.postLikes[i]});
-                if(!user){
+        let temp = request.query.postLikes.split(",")
+        console.log(temp)
+        for(let i = 0; i<temp.length;i++){
+                let user = await Mentor.findOne({mentorAccountId:temp[i]});
+                if(user){
                     objArrayOfLikes.push({
                         userName:user.mentorName,
                         userTagline:user.mentorTagline,
@@ -217,7 +247,7 @@ export const repostPostController = async(request, response) => {
         console.log(temp)
         await Mentor.findOneAndUpdate({mentorAccountId:request.query.mentorAccountId}, temp, options);
         await Post.findOneAndUpdate({_id:request.query.postId}, post, options);
-        return response.status(200).json(mentorAccountId)
+        return response.status(200).json(request.query.mentorAccountId)
     } catch (error) {
 
         console.log(error)

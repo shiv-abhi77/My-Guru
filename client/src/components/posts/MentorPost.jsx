@@ -24,6 +24,7 @@ const MentorPost = ({post, saved, mentorName, mentorTagline, mentorImage}) => {
     const {setAccount} = useContext(DataContext);
     const [open, setOpen] = useState(false);
     const [open2, setOpen2] = useState(false);
+    const [open3, setOpen3] = useState(false);
     const [imageFile, setImageFile] = useState(null)
     const [textLimit, setLimit] = useState(true)
     const [tempComment, setTempComment] = useState({})
@@ -65,6 +66,14 @@ const MentorPost = ({post, saved, mentorName, mentorTagline, mentorImage}) => {
 const handleClose2 = () => {
     setTempComment(commentInitialValues)
     setOpen2(false);
+};
+const handleClickOpen3 = (postId) => {
+    setOpen3(true);
+    getLikesApi()
+};
+
+const handleClose3 = () => {
+    setOpen3(false);
 };
   const updatePost = async(postId) =>{
     console.log(postState)
@@ -151,7 +160,7 @@ const getCommentsApi = async() => {
         }
 }
 const getLikesApi = async() => {
-    const url = `http://localhost:8000/getComments?postComments=${postState.postLikes}`;
+    const url = `http://localhost:8000/getLikes?postLikes=${postState.postLikes}`;
     const settings = {
     method: 'GET',
     headers: {
@@ -281,7 +290,7 @@ const repostApi = async(postId)=> {
                 borderRadius:'5px',
                 marginTop:'10px'
             }}>
-                {
+                {/* {
                     postState.postAccountId === account.id?
                     <>
 
@@ -293,7 +302,7 @@ const repostApi = async(postId)=> {
                     }}>
                         Reposted
                     </div>
-                }
+                } */}
                 <div style={{
                     display:'flex',
                     flexDirection:'row',
@@ -605,10 +614,119 @@ const repostApi = async(postId)=> {
                 <div style={{
                     cursor:'pointer'
                 }}
-                onClick={() => {getLikesApi()}}
+                onClick={() => {handleClickOpen3()}}
                 >
                         {postState.postLikes.length} have liked this
                 </div>
+                <Dialog open={open3} onClose={handleClose3}>
+                    <DialogTitle>People who liked</DialogTitle>
+                    <DialogContent>
+                    <div style={{
+                    display:'flex',
+                    flexDirection:'column'
+                }}>
+                {
+                    postLikesArray && postLikesArray.length > 0?
+
+                    postLikesArray.map(e => (
+                        <>
+                        <div style={{
+                        display:'flex',
+                        flexDirection:'column',
+                        marginTop:'5px'
+                    }}>
+
+                    <div style={{
+                    display:'flex',
+                    flexDirection:'row',
+                    }}>
+
+                
+                    <div style={{
+                    display: 'block',
+                    minWidth: '40px',
+                    borderRadius:'25px',
+                    background:'#cda8ff',
+                    width:'40px',
+                    height:'40px',
+                    marginTop:'8px'
+                   
+                }}>
+                    <img src={e.userImage && e.userImage !== ""?e.userImage:'https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png'}alt="Mentor Image" style={{
+                   
+                    display: 'block',     
+                    width: '100%',
+                    minWidth: '100%',
+                    height: '100%',
+                    minHeight: '100%',
+                    borderWidth: '0px',
+                    outline: 'none' ,
+                    borderRadius:'60px',
+                    objectFit:'cover'
+                    // display: 'block',     
+                    // width: '100%',
+                    // minWidth: '100%',
+                    // height: '100%',
+                    // minHeight: '100%',
+                    // borderWidth: '0px',
+                    // outline: 'none' ,
+                    // borderRadius:'10px'
+            }} />
+                </div>
+
+                <div style={{
+                    display:'flex',
+                    flexDirection:'column',
+                    marginTop:'6px',
+                    marginLeft:'10px',
+                    background:'#f2f2f2',
+                    width:'100%',
+                    padding:'8px'
+                }}>
+
+                <div style={{
+                    display:'flex',
+                    flexDirection:'row'
+                }}>
+                <div style={{
+                        fontFamily:'DM Sans',
+                        fontSize:'14px',
+                        fontWeight:'700',
+                        color:'black'
+                    }}>
+                        {e.userName}
+                    </div>
+                </div>
+                    
+                    <div style={{
+                        fontFamily:'DM Sans',
+                        fontSize:'12px',
+                        color:"rgba(0, 0, 0, 0.6)"
+                    }}>
+                        {e.userTagline}
+                    </div>
+                </div>
+                
+                </div>
+
+                    </div>
+                        </>
+                    ))
+                    
+
+                    :
+                    <></>
+
+                }
+
+                </div>
+                {/* End of school name */}
+                
+                    </DialogContent>
+                    <DialogActions>
+                    <Button onClick={handleClose3}>Cancel</Button>
+                    </DialogActions>
+             </Dialog>
                 <div style={{
                     cursor:'pointer',
                     marginLeft:'auto',
@@ -801,7 +919,7 @@ const repostApi = async(postId)=> {
                         {e.userName}
                     </div>
 
-                <div style={{
+                {/* <div style={{
                         fontFamily:'DM Sans',
                         fontSize:'12px',
                         color:"rgba(0, 0, 0, 0.6)",
@@ -853,7 +971,7 @@ const repostApi = async(postId)=> {
                             ' years':
                             ''
                             } ago
-                    </div>
+                    </div> */}
                 </div>
                     
                     <div style={{

@@ -24,11 +24,13 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { getAccessToken } from "../../utils/util";
 import ImageIcon from '@mui/icons-material/Image';
 import { getType } from "../../utils/util";
+import MentorPost from "../posts/MentorPost";
 const MentorHome = () =>{
     const {account}=useContext(DataContext);
     const {setAccount} = useContext(DataContext);
     const [open, setOpen] = useState(false);
     const [imageFile, setImageFile] = useState(null)
+    const [posts, setPosts] = useState({})
     const postInitialValues = {
         postAccountId:account.id,
         postLikes:[],
@@ -103,6 +105,29 @@ const MentorHome = () =>{
       }
       storeImageAndGetLink();
     }, [imageFile])
+    useEffect(() => {
+        const myFunction = async() => {
+        const url = `http://localhost:8000/getAllPostsExcept?mentorAccountId=${account.id}`;
+        const settings = {
+        method: 'GET',
+        headers: {
+            accept: 'application/json',
+            authorization : getAccessToken()
+        }
+        };
+        try {
+            const fetchResponse = await fetch(url, settings);
+            const response = await fetchResponse.json();
+            setPosts(response.result);
+            
+            } catch (e) {
+            console.log(e);
+            }
+    
+        }
+        
+        myFunction()
+    }, [])
     
     return(
         <>
@@ -125,11 +150,13 @@ const MentorHome = () =>{
                 }}>
 
             
-                <div>
+                <div style={{
+                    margin:'auto'
+                }}>
                 <TextField
                 onClick={() => handleClickOpen()}
                 inputProps={{
-                    style: {color:'black',fontSize:'14px',fontWeight:'400', borderRadius:'35px', border:'1px solid black', padding:'10px' },
+                    style: {color:'black',fontSize:'16px',fontWeight:'400', borderRadius:'35px', border:'3px solid #c1cdd8', padding:'17px', background:'aliceblue' },
                 }}
                 placeholder="Start a post"
                  id="outlined-basic" 
@@ -138,6 +165,7 @@ const MentorHome = () =>{
                     disableUnderline: true,
                     style:{
                         width:600,
+                        background:''
                         }
                     }}
                  />
@@ -254,7 +282,39 @@ const MentorHome = () =>{
                     <Button onClick={()=>{addNewPostApi(postState)}}>Save</Button>
                     </DialogActions>
              </Dialog>
+             <div style={{
+             }}>
 
+            
+             <div style={{
+                width:'100%',
+                display:'flex',
+                justifyContent:'center',
+                }}>
+                <div style={{
+                display:'flex',
+                flexDirection:'column',
+                flexBasis:'50%'
+        }}>
+
+        {
+            posts && posts.length > 0 ? posts.map(e => (
+                        <MentorPost  post = {e.post}
+                            mentorName={e.mentorName}
+                            mentorTagline={e.mentorTagline}
+                            mentorImage = {e.mentorImage}
+                            saved = {false}
+                        />
+            ))
+            :
+            console.log('no data to show')
+        }
+        
+        </div>
+        </div>
+
+
+                </div>                      
             
             
             </div>
