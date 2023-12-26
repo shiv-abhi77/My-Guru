@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken'
 import token from '../model/token-schema.js'
 import Student from '../model/student-schema.js';
 import Post from '../model/post-schema.js';
-
+import Comment from '../model/comment-schema.js';
 
 export const getMentorProfileController = async(request, response) => {
     
@@ -86,5 +86,140 @@ export const getPostsController = async(request, response) => {
 
     }catch(error){
         return response.status(500).json('failed posts fetching');
+    }
+}
+
+export const createCommentController = async(request, response) => {
+    
+    try {
+        
+        const newComment = new Comment(request.body);
+        await newComment.save();
+        let temp = await Post.findOne({_id:request.query.postId});
+        if(!temp){
+            return response.status(404).json('failed commend add not found post');
+        }
+        temp.postComments.push(newComment._id)
+        const options = {new : true}
+        await Post.findOneAndUpdate({_id:request.query.postId}, temp, options);
+        return response.status(200).json(newComment._id);
+    } catch (error) {
+        console.log(error)
+        return response.status(500).json('failed adding comment')
+    }
+}
+export const addLikeController = async(request, response) => {
+    
+    try {
+        
+        let temp = await Post.findOne({_id:request.query.postId});
+        if(!temp){
+            return response.status(404).json('failed like add not found post');
+        }
+        
+        temp.postLikes.push(request.query.likeUserId)
+        console.log(temp)
+        const options = {new : true}
+        await Post.findOneAndUpdate({_id:request.query.postId}, temp, options);
+        return response.status(200).json('success adding likes');
+    } catch (error) {
+        console.log(error)
+        return response.status(500).json('failed adding like')
+    }
+}
+export const removeLikeController = async(request, response) => {
+    
+    try {
+        let temp = await Post.findOne({_id:request.query.postId});
+        if(!temp){
+            return response.status(404).json('failed like add not found post');
+        }
+        temp = {...temp._doc, postLikes:temp._doc.postLikes.filter((e) => {
+            if(e !== request.query.likeUserId) return e
+        })}
+        const options = {new : true}
+        await Post.findOneAndUpdate({_id:request.query.postId}, temp, options);
+        return response.status(200).json('success remove like');
+    } catch (error) {
+        console.log(error)
+        return response.status(500).json('failed remove like')
+    }
+}
+
+export const getCommentsController = async(request, response) => {
+
+    try{
+        let objArrayOfComments = [];
+        
+        let temp = request.query.postComments.split(",")
+        for(let i = 0; i<temp.length;i++){
+            let temp2 = await Comment.findOne({_id:temp[i]});
+            console.log(temp2)
+            if(temp2){
+                let user = await Mentor.findOne({mentorAccountId:temp2.commentAccountId});
+                if(user){
+                    objArrayOfComments.push({
+                        comment:temp2,
+                        userName:user.mentorName,
+                        userTagline:user.mentorTagline,
+                        userImage:user.mentorImage,
+                        userAccountId:user.mentorAccountId
+                    });
+                }
+            }
+            
+        }
+        return response.status(200).json({objArrayOfComments});
+
+    }catch(error){
+        return response.status(500).json('failed comments fetching');
+    }
+}
+
+export const getLikesController = async(request, response) => {
+
+    try{
+        let objArrayOfLikes = [];
+        for(let i = 0; i<request.query.postLikes;i++){
+                let user = await Mentor.findOne({mentorAccountId:request.query.postLikes[i]});
+                if(!user){
+                    objArrayOfLikes.push({
+                        userName:user.mentorName,
+                        userTagline:user.mentorTagline,
+                        userImage:user.mentorImage
+                    });
+                }
+        }
+        return response.status(200).json({objArrayOfLikes});
+
+    }catch(error){
+        return response.status(500).json('failed likes fetching');
+    }
+}
+export const repostPostController = async(request, response) => {
+    let temp = {}
+    if(request.query.role === 'mentor'){
+         temp = await Mentor.findOne({mentorAccountId:request.query.mentorAccountId});
+    }
+    
+    if(!temp){
+        return response.status(409).json({msg:'unsuccessfull'});
+    }
+    let post = await Post.findOne({_id:request.query.postId})
+    if(!post){
+        return response.status(409).json({msg:'unsuccessfull'});
+        
+    }
+    try {
+        temp.mentorPosts.push(request.query.postId)
+        post.postReposts.push(request.query.mentorAccountId)
+        const options = { new: true };
+        console.log(temp)
+        await Mentor.findOneAndUpdate({mentorAccountId:request.query.mentorAccountId}, temp, options);
+        await Post.findOneAndUpdate({_id:request.query.postId}, post, options);
+        return response.status(200).json(mentorAccountId)
+    } catch (error) {
+
+        console.log(error)
     }
 }

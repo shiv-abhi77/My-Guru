@@ -33,6 +33,7 @@ const MentorHome = () =>{
         postAccountId:account.id,
         postLikes:[],
         postComments:[],
+        postReposts:[],
         postTitle:'',
         postBody:'',
         postImage:'',
@@ -124,7 +125,7 @@ const MentorHome = () =>{
                 }}>
 
             
-                <div >
+                <div>
                 <TextField
                 onClick={() => handleClickOpen()}
                 inputProps={{

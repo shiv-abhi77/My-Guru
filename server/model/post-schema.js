@@ -9,6 +9,10 @@ const postSchema = mongoose.Schema({
         type:[String],
         required:false
     },
+    postReposts:{
+        type:[String],
+        required:false
+    },
     postComments:{
         type:[String],
         required:false
