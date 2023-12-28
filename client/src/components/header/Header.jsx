@@ -127,6 +127,7 @@ export default function Header() {
     >
       <MenuItem onClick={() => {account.role === 'mentor'?navigate(`/mentor/profile/`):navigate('/student/profile')}}>Profile</MenuItem>
       <MenuItem onClick={() => { if(location.pathname.includes('login') === false) setAccount({username :'', loggedIn:false, id:'', role:''}); navigate('/login')}}>Logout</MenuItem>
+      <MenuItem onClick={() => {account.role === 'mentor'?navigate(`/mentor/public/`):navigate('/student/profile')}}>Public Profile</MenuItem>
     </Menu>
   );
 
