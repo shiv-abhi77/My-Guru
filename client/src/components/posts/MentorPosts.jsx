@@ -4,6 +4,7 @@ import { useNavigate, useParams, Link } from "react-router-dom"
 import { DataContext } from "../../context/DataProvider"
 import { getAccessToken } from "../../utils/util.js"
 import MentorPost from "./MentorPost.jsx"
+import { cleanDigitSectionValue } from "@mui/x-date-pickers/internals/hooks/useField/useField.utils.js"
 const MentorPosts = () => {
     const {account}=useContext(DataContext);
     const {setAccount} = useContext(DataContext);
@@ -59,7 +60,17 @@ const MentorPosts = () => {
                             mentorName={posts.mentorName}
                             mentorTagline={posts.mentorTagline}
                             mentorImage = {posts.mentorImage}
-                            saved = {false}
+                            
+                            // onUpdate={(post) => {
+                            //     for(let i = 0; i< posts.objArrayOfPosts.length;i++){
+                            //         if(posts.objArrayOfPosts[i]._id === post._id){
+                            //             posts.objArrayOfPosts[i] = post
+                            //             console.log(posts)
+                            //             break
+                            //         }
+                            //     }
+                            //     setPosts({...posts, objArrayOfPosts:posts.objArrayOfPosts})
+                            // }}
                         />
             ))
             :

@@ -32,7 +32,11 @@ const MentorPlans = ({mentor, onUpdate}) =>{
     const {account}=useContext(DataContext);
     const {setAccount} = useContext(DataContext);
     const planObjInitial = {
-        perks:'',
+        videoCalls:'',
+        streams:'',
+        posts:'',
+        otherPerks:'',
+        price:0,
         _id:''
     }
     const [open, setOpen] = useState(false);
@@ -174,7 +178,7 @@ const deleteProjectApi = () => {
                 
                 </div>
                 {
-                    account.role !== 'company'?
+                    account.role === 'mentor'?
                     <div onClick={handleClickOpen} style={{
                     marginLeft:'auto',
                     marginRight:'0px',
@@ -212,19 +216,127 @@ const deleteProjectApi = () => {
                         <div style={{
                             color:'black'
                         }}>
-                            Plan Description
+                            No. of video calls
                         </div>
 
                         <div>
                             <TextField
-                                name="perks"
-                                value={tempPlan.perks}
+                                name="videoCalls"
+                                value={tempPlan.videoCalls}
                                 onChange={(e) => {
                                     setTempPlan({...tempPlan, [e.target.name]: e.target.value})
                                 }}
                                 id="filled-multiline-flexible"
                                 label="Multiline"
                                 multiline
+                                maxRows={4}
+                                variant="filled"
+                                    style={{width:500}}
+                                />
+                        </div>
+                </div>
+                <div style={{
+                        display:'flex',
+                        flexDirection:'column',
+                        marginTop:'15px'
+                    }}>
+                        <div style={{
+                            color:'black'
+                        }}>
+                            No. of streams
+                        </div>
+
+                        <div>
+                            <TextField
+                                name="streams"
+                                value={tempPlan.streams}
+                                onChange={(e) => {
+                                    setTempPlan({...tempPlan, [e.target.name]: e.target.value})
+                                }}
+                                id="filled-multiline-flexible"
+                                label="Multiline"
+                                multiline
+                                maxRows={4}
+                                variant="filled"
+                                    style={{width:500}}
+                                />
+                        </div>
+                </div>
+                <div style={{
+                        display:'flex',
+                        flexDirection:'column',
+                        marginTop:'15px'
+                    }}>
+                        <div style={{
+                            color:'black'
+                        }}>
+                            No. of posts/articles provided
+                        </div>
+
+                        <div>
+                            <TextField
+                                name="posts"
+                                value={tempPlan.posts}
+                                onChange={(e) => {
+                                    setTempPlan({...tempPlan, [e.target.name]: e.target.value})
+                                }}
+                                id="filled-multiline-flexible"
+                                label="Multiline"
+                                multiline
+                                maxRows={4}
+                                variant="filled"
+                                    style={{width:500}}
+                                />
+                        </div>
+                </div>
+                <div style={{
+                        display:'flex',
+                        flexDirection:'column',
+                        marginTop:'15px'
+                    }}>
+                        <div style={{
+                            color:'black'
+                        }}>
+                            Other perks
+                        </div>
+
+                        <div>
+                            <TextField
+                                name="otherPerks"
+                                value={tempPlan.otherPerks}
+                                onChange={(e) => {
+                                    setTempPlan({...tempPlan, [e.target.name]: e.target.value})
+                                }}
+                                id="filled-multiline-flexible"
+                                label="Multiline"
+                                multiline
+                                maxRows={4}
+                                variant="filled"
+                                    style={{width:500}}
+                                />
+                        </div>
+                </div>
+                <div style={{
+                        display:'flex',
+                        flexDirection:'column',
+                        marginTop:'15px'
+                    }}>
+                        <div style={{
+                            color:'black'
+                        }}>
+                            {`Price of plan (in Rs per month)`}
+                        </div>
+
+                        <div>
+                            <TextField
+                                name="price"
+                                value={tempPlan.price}
+                                onChange={(e) => {
+                                    setTempPlan({...tempPlan, [e.target.name]: e.target.value})
+                                }}
+                                id="standard-number"
+                                label="Multiline"
+                                type="number"
                                 maxRows={4}
                                 variant="filled"
                                     style={{width:500}}
@@ -276,16 +388,60 @@ const deleteProjectApi = () => {
                             flexDirection:'row',
 
                         }}>
+                        <div style={{
+                            display:'flex',
+                            flexDirection:'column'
+                        }}>
                             <div style={{
                                 color:'black',
                                 fontSize:'18px',
                                 width:750
+                                
                             }}>
-                            {plan.perks}
+                            {`No. of video calls: ${plan.videoCalls}`}
                             </div>
 
+                            <div style={{
+                                color:'black',
+                                fontSize:'18px',
+                                width:750,
+                                marginTop:'2px',
+
+                            }}>
+                            {`No. of streams: ${plan.streams}`}
+                            </div>
+
+                            <div style={{
+                                color:'black',
+                                fontSize:'18px',
+                                width:750,
+                                marginTop:'2px',
+                            }}>
+                            {`No. of posts/articles: ${plan.posts}`}
+                            </div>
+
+                            <div style={{
+                                color:'black',
+                                fontSize:'18px',
+                                width:750,
+                                marginTop:'2px',
+                            }}>
+                            {`Other perks: ${plan.otherPerks}`}
+                            </div>
+                            <div style={{
+                                color:'black',
+                                fontSize:'18px',
+                                width:750,
+                                marginTop:'2px',
+                            }}>
+                            {`Price of plan(in Rs per month): ${plan.price}`}
+                            </div>
+
+                        </div>
+                            
+
                             {
-                                account.role !== 'company'?
+                                account.role === 'mentor'?
                                 <div style={{
                             marginLeft:'auto',
                             marginRight:'0px',
@@ -331,13 +487,13 @@ const deleteProjectApi = () => {
                         <div style={{
                             color:'black'
                         }}>
-                            Plan Description
+                            No. of video calls
                         </div>
 
                         <div>
                             <TextField
-                                name="perks"
-                                value={tempPlan.perks}
+                                name="videoCalls"
+                                value={tempPlan.videoCalls}
                                 onChange={(e) => {
                                     setTempPlan({...tempPlan, [e.target.name]: e.target.value})
                                 }}
@@ -350,6 +506,115 @@ const deleteProjectApi = () => {
                                 />
                         </div>
                 </div>
+
+                <div style={{
+                        display:'flex',
+                        flexDirection:'column',
+                        marginTop:'15px'
+                    }}>
+                        <div style={{
+                            color:'black'
+                        }}>
+                            No. of streams
+                        </div>
+
+                        <div>
+                            <TextField
+                                name="streams"
+                                value={tempPlan.streams}
+                                onChange={(e) => {
+                                    setTempPlan({...tempPlan, [e.target.name]: e.target.value})
+                                }}
+                                id="filled-multiline-flexible"
+                                label="Multiline"
+                                multiline
+                                maxRows={4}
+                                variant="filled"
+                                    style={{width:500}}
+                                />
+                        </div>
+                </div>
+                <div style={{
+                        display:'flex',
+                        flexDirection:'column',
+                        marginTop:'15px'
+                    }}>
+                        <div style={{
+                            color:'black'
+                        }}>
+                            No. of posts/articles provided
+                        </div>
+
+                        <div>
+                            <TextField
+                                name="posts"
+                                value={tempPlan.posts}
+                                onChange={(e) => {
+                                    setTempPlan({...tempPlan, [e.target.name]: e.target.value})
+                                }}
+                                id="filled-multiline-flexible"
+                                label="Multiline"
+                                multiline
+                                maxRows={4}
+                                variant="filled"
+                                    style={{width:500}}
+                                />
+                        </div>
+                </div>
+                <div style={{
+                        display:'flex',
+                        flexDirection:'column',
+                        marginTop:'15px'
+                    }}>
+                        <div style={{
+                            color:'black'
+                        }}>
+                            Other perks
+                        </div>
+
+                        <div>
+                            <TextField
+                                name="otherPerks"
+                                value={tempPlan.otherPerks}
+                                onChange={(e) => {
+                                    setTempPlan({...tempPlan, [e.target.name]: e.target.value})
+                                }}
+                                id="filled-multiline-flexible"
+                                label="Multiline"
+                                multiline
+                                maxRows={4}
+                                variant="filled"
+                                    style={{width:500}}
+                                />
+                        </div>
+                </div>
+               <div style={{
+                        display:'flex',
+                        flexDirection:'column',
+                        marginTop:'15px'
+                    }}>
+                        <div style={{
+                            color:'black'
+                        }}>
+                            {`Price of plan (in Rs per month)`}
+                        </div>
+
+                        <div>
+                            <TextField
+                                name="price"
+                                value={tempPlan.price}
+                                onChange={(e) => {
+                                    setTempPlan({...tempPlan, [e.target.name]: e.target.value})
+                                }}
+                                id="standard-number"
+                                label="Multiline"
+                                type="number"
+                                variant="filled"
+                                    style={{width:500}}
+                                />
+                        </div>
+                </div>
+                
 
 
 

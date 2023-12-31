@@ -119,6 +119,7 @@ const MentorProfile = () => {
                 achievements:[],
                 reviewsGot:[],
                 mentorChats:[],
+                mentorSavedPosts:[],
                 statistics:{},
                 
     }

@@ -22,6 +22,7 @@ export const signupUserController = async(request, response) => {
                 mentorContact:'',
                 rating:0,
                 mentorTagline:'',
+                mentorImage:'',
                 mentorExams:[],
                 mentorSubjects:[],
                 mentorFollowers:[],
@@ -32,7 +33,28 @@ export const signupUserController = async(request, response) => {
                 achievements:[],
                 reviewsGot:[],
                 mentorChats:[],
+                mentorSavedPosts:[],
                 statistics:{},
+                
+            })
+            console.log(newMentor)
+            await newMentor.save();
+        }else{
+            const newMentor = new Student({
+                studentAccountId:newUser._id,
+                studentName:'',
+                studentEmail:'',
+                studentContact:'',
+                aboutYourself:'',
+                studentPlans:[],
+                studentExams:[],
+                studentMentors:[],
+                studentSavedPosts:[],
+                studentLikedPosts:[],
+                studentSubjects:[],
+                studentChats:[],
+                reviewsPosted:[],
+                ratingGiven:[]
                 
                 
             })

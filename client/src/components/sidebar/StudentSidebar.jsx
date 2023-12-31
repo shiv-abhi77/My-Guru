@@ -51,7 +51,7 @@ export default function StudentSidebar() {
         
       <Divider style={{backgroundColor:'#00ecff'}} />
         <List>
-          {["Home","Explore", "Find Mentors", "Your Mentors","Following", "Bookmarked"].map((text, index) => (
+          {["Home","Explore", "Find Mentors", "Your Mentors", "Bookmarked"].map((text, index) => (
             <ListItem key={text} disablePadding>
 
 
@@ -89,16 +89,9 @@ export default function StudentSidebar() {
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>
+              
               :
               index === 4 ?
-              <ListItemButton onClick={() => { if(location.pathname.includes('/student/following') === false) navigate('/student/following')}} >
-                <ListItemIcon style={{ color: '#00ecff' }} >
-                   <PeopleIcon/>
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-              :
-              index === 5 ?
               <ListItemButton onClick={() => { if(location.pathname.includes('/student/bookmarked') === false) navigate('/student/bookmarked')}} >
                 <ListItemIcon style={{ color: '#00ecff' }} >
                    <BookmarkIcon/>

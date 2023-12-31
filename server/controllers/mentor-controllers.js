@@ -96,6 +96,7 @@ export const getAllPostsExceptYoursController = async(request, response) => {
         objArrayOfPosts = await Post.find({});
         for(let i = 0;i<objArrayOfPosts.length;i++){
             if(objArrayOfPosts[i].postAccountId !== request.query.mentorAccountId){
+                if(objArrayOfPosts[i].postAccess === 'For all'){
                 let temp = await Mentor.findOne({mentorAccountId:objArrayOfPosts[i].postAccountId});
                 
                 if(temp){
@@ -107,6 +108,7 @@ export const getAllPostsExceptYoursController = async(request, response) => {
                         
                     })
                 }
+            }
             }
         }
         // let mentor = await Mentor.findOne({mentorAccountId:request.query.mentorAccountId});
@@ -251,5 +253,21 @@ export const repostPostController = async(request, response) => {
     } catch (error) {
 
         console.log(error)
+    }
+}
+
+export const deletePostController = async(request, response) => {
+
+    try{
+        await Post.findOneAndDelete({_id:request.query.postId});
+        let mentor = await Mentor.findOne({mentorAccountId:request.query.mentorAccountId});
+        mentor = {...mentor._doc, mentorPosts:[...mentor._doc.mentorPosts.filter(e => {
+            if(e._id.toString() !== request.query.postId) return e
+        })]}
+        // let mentor = await Mentor.findOne({mentorAccountId:request.query.mentorAccountId});
+        return response.status(200).json({objArrayOfPosts, mentorName:mentor.mentorName, mentorTagline:mentor.mentorTagline, mentorImage:mentor.mentorImage});
+
+    }catch(error){
+        return response.status(500).json('failed posts fetching');
     }
 }

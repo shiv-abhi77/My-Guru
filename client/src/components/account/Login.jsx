@@ -157,11 +157,14 @@ const Login = ()=>{
                 
                 setAccount({username : response.username, loggedIn:true, id:response.mongoId, role:response.role});
                 setLogin(loginIntialValues)
-                if(account.role === 'student'){
-                    navigate('/student/home');
+                if(response.role === 'student'){
+                    navigate('/student/home')
                 }else{
-                    navigate('/mentor/home');
+                    navigate('/mentor/home')
                 }
+                    
+
+                
                 
                 
                 

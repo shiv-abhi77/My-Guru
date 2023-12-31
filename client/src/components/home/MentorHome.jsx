@@ -25,6 +25,13 @@ import { getAccessToken } from "../../utils/util";
 import ImageIcon from '@mui/icons-material/Image';
 import { getType } from "../../utils/util";
 import MentorPost from "../posts/MentorPost";
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormLabel from '@mui/material/FormLabel';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import subjects from "../../constants/subjects";
+import exams from "../../constants/exams";
+import CloseIcon from '@mui/icons-material/Close';
 const MentorHome = () =>{
     const {account}=useContext(DataContext);
     const {setAccount} = useContext(DataContext);
@@ -36,6 +43,8 @@ const MentorHome = () =>{
         postLikes:[],
         postComments:[],
         postReposts:[],
+        postExams:[],
+        postSubjects:[],
         postTitle:'',
         postBody:'',
         postImage:'',
@@ -52,6 +61,32 @@ const MentorHome = () =>{
         setPost(postInitialValues)
         setOpen(false);
   };
+  const handleRadio = (e) => {
+    setPost({...postState, postAccess:e.target.value });
+}
+const handleExamSelect = (e) => {
+    if(!postState.postExams.includes(e.target.value))
+    setPost({...postState, postExams:[...postState.postExams, e.target.value]});
+    console.log(postState)
+}
+const handleDeleteExam = (exam) => {
+    
+    setPost({...postState, postExams:postState.postExams.filter((e)=>{
+        if(e !== exam) return true;
+    })});
+    console.log(postState)
+}
+const handleSubjectSelect = (e) => {
+    if(!postState.postSubjects.includes(e.target.value))
+    setPost({...postState, postSubjects:[...postState.postSubjects, e.target.value]});
+    console.log(postState)
+}
+const handleDeleteSubject = (exam) => {
+    setPost({...postState, postSubjects:postState.postSubjects.filter((e)=>{
+        if(e !== exam) return true;
+    })});
+    console.log(postState)
+}
   const addNewPostApi = async()=> {
     
     let newPost = postState
@@ -151,7 +186,9 @@ const MentorHome = () =>{
 
             
                 <div style={{
-                    margin:'auto'
+                    margin:'auto',
+                    position:'sticky',
+                    top:64
                 }}>
                 <TextField
                 onClick={() => handleClickOpen()}
@@ -181,6 +218,196 @@ const MentorHome = () =>{
                         fontSize:'15px'}}>
 
                         {/* Start of school name */}
+
+                        <div>   
+                    <FormControl>
+                            <FormLabel id="demo-row-radio-buttons-group-label">Give access to</FormLabel>
+                            <RadioGroup
+                            onChange={(e) => {
+                                                    handleRadio(e);
+                                                }}
+                                row
+                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                name="row-radio-buttons-group"
+                            >
+                                <FormControlLabel value="For all" control={<Radio  />} label="For all" />
+                                <FormControlLabel value="Only mentees" control={<Radio />} label="Only mentees" />
+                                
+                                
+                            </RadioGroup>
+                    </FormControl>
+                        </div>
+                        
+                <div style={{
+                display:'flex',
+                flexDirection:'column',
+                marginTop:'15px',
+            }}>
+                <div style={{
+                    color:'black'
+                }}>
+                    Select the exams
+                </div>
+
+                <div style={{
+                    width:500,
+                }}>
+                <FormControl fullWidth>
+                    
+                    <NativeSelect
+                        onChange={(e) => {
+                            handleExamSelect(e)
+                        }}
+                        value={postState.postExams && postState.postExams.length > 0 ? postState.postExams[postState.postExams.length-1]:''}
+                        defaultValue={30}
+                        inputProps={{
+                        name: 'age',
+                        id: 'uncontrolled-native',
+                        }}
+                    >
+                    {
+                        exams.map((exam) =>
+                        (
+                            <option  value={exam}>{exam}</option>
+                        ))
+                    
+                    }
+                        
+                    </NativeSelect>
+
+                </FormControl>
+                <div style={{
+                    display:'flex',
+                    flexDirection:'row',
+                    maxHeight:'100px',
+                    overflowY:'auto',
+                    flexWrap:'wrap'
+                }}>
+
+                        
+
+                {
+                    
+                   postState.postExams && postState.postExams.length>0?
+                   postState.postExams.map((exam) =>
+                        (
+                        <div>
+                        <div  style={{
+                        background:'#27538b',
+                        color:'white',
+                        marginTop:'1px',
+                        borderRadius:'20px',
+                        width:'fit-content',
+                        padding:'5px',
+                        display:'flex',
+                        flexDirection:'row'
+                    }}>
+                            <div>
+                                {exam}
+                            </div>
+                            <div>
+                            <CloseIcon  onClick={() => {handleDeleteExam(exam)}} style={{
+                                cursor:'pointer'
+                            }}/>
+                            </div>
+                            </div>
+                        </div>
+                        ))
+                        :
+                        ''
+                }
+                    
+                        
+                   
+                </div>
+                </div>
+            </div>
+            <div style={{
+                display:'flex',
+                flexDirection:'column',
+                marginTop:'15px',
+               
+            }}>
+                <div style={{
+                    color:'black'
+                }}>
+                    Select the subjects
+                </div>
+
+                <div style={{
+                    width:500,
+                }}>
+                <FormControl fullWidth>
+                    
+                    <NativeSelect
+                        onChange={(e) => {
+                            handleSubjectSelect(e)
+                        }}
+                        value={postState.postSubjects && postState.postSubjects.length > 0 ? postState.postSubjects[postState.postSubjects.length-1]:''}
+                        defaultValue={30}
+                        inputProps={{
+                        name: 'age',
+                        id: 'uncontrolled-native',
+                        }}
+                    >
+                    {
+                        subjects.map((subject) =>
+                        (
+                            <option  value={subject}>{subject}</option>
+                        ))
+                    
+                    }
+                        
+                    </NativeSelect>
+
+                </FormControl>
+                <div style={{
+                    display:'flex',
+                    flexDirection:'row',
+                    maxHeight:'100px',
+                    overflowY:'auto',
+                    flexWrap:'wrap'
+                }}>
+
+                        
+
+                {
+                    
+                  postState.postSubjects && postState.postSubjects.length>0?  
+                  postState.postSubjects.map((subject) =>
+                        (
+                        <div>
+                        <div  style={{
+                        background:'#27538b',
+                        marginTop:'1px',
+                        color:'white',
+                        borderRadius:'20px',
+                        width:'fit-content',
+                        padding:'5px',
+                        display:'flex',
+                        flexDirection:'row'
+                    }}>
+                            <div>
+                                {subject}
+                            </div>
+                            <div>
+                            <CloseIcon  onClick={() => {handleDeleteSubject(subject)}} style={{
+                                cursor:'pointer'
+                            }}/>
+                            </div>
+                            </div>
+                        </div>
+                        ))
+                        :
+                        ''
+                }
+                    
+                        
+                   
+                </div>
+                </div>
+            </div>
+
                     <div style={{
                         display:'flex',
                         flexDirection:'column',

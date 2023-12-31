@@ -34,10 +34,31 @@ const mentorSchema = mongoose.Schema({
     },
     mentorPlans:[
         {
-            perks:{
+            otherPerks:{
                 type:String,
                 required:false
+            },
+            videoCalls:{
+                type:String,
+                required:false
+            },
+            streams:{
+                type:String,
+                required:false
+            },
+            posts:{
+                type:String,
+                required:false
+            },
+            price:{
+                type:Number,
+                required:false
+            },
+            planSold:{
+                type:Number,
+                required:false
             }
+
         }
     ],
     education :[{
@@ -63,7 +84,8 @@ const mentorSchema = mongoose.Schema({
         grade:{
             type:String,
             required:false
-        }
+        },
+        
 }],
 workExperiences:[{
     companyName:{

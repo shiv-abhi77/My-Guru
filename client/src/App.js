@@ -11,6 +11,8 @@ import MentorProfile from './components/profile/MentorProfile';
 import MentorPosts from './components/posts/MentorPosts';
 import CreatePost from './components/posts/CreatePost';
 import MentorPublicProfile from './components/profile/MentorPublicProfile';
+import StudentProfile from './components/profile/StudentProfile';
+import StudentExplore from './components/home/StudentExplore';
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
               <Route  path = '/mentor/home' element = {<MentorHome/>}/>
               <Route  path = '/login' element = {<Login/>}/>
               <Route  path = '/mentor/profile' element = {<MentorProfile/>}/>
+              <Route  path = '/student/profile' element = {<StudentProfile/>}/>
+              <Route  path = '/student/explore' element = {<StudentExplore/>}/>
               <Route  path = '/mentor/posts' element = {<MentorPosts/>}/>
               <Route  path = '/mentor/createpost' element = {<CreatePost/>}/>
               <Route  path = '/mentor/public' element = {<MentorPublicProfile/>}/>

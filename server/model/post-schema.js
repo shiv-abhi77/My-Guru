@@ -5,11 +5,27 @@ const postSchema = mongoose.Schema({
         type:String,
         required:false
     },
+    postAccess:{
+        type:String,
+        required:false
+    },
+    postExams:{
+        type:[String],
+        required:false
+    },
+    postSubjects:{
+        type:[String],
+        required:false
+    },
     postLikes:{
         type:[String],
         required:false
     },
     postReposts:{
+        type:[String],
+        required:false
+    },
+    postBookmarks:{
         type:[String],
         required:false
     },

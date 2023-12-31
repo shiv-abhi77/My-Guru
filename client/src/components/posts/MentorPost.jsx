@@ -16,10 +16,21 @@ import ImageIcon from '@mui/icons-material/Image';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import AddCommentIcon from '@mui/icons-material/AddComment';
 import SyncAltIcon from '@mui/icons-material/SyncAlt';
+import DeleteIcon from '@mui/icons-material/Delete';
 import dayjs from 'dayjs';
 import CommentIcon from '@mui/icons-material/Comment';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormLabel from '@mui/material/FormLabel';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import subjects from '../../constants/subjects';
+import exams from '../../constants/exams';
+import CloseIcon from '@mui/icons-material/Close';
+import NativeSelect from '@mui/material/NativeSelect';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import { cleanDigitSectionValue } from '@mui/x-date-pickers/internals/hooks/useField/useField.utils';
-const MentorPost = ({post, saved, mentorName, mentorTagline, mentorImage}) => {
+const MentorPost = ({post, mentorName, mentorTagline, mentorImage}) => {
+    const navigate = useNavigate()
     const {account}=useContext(DataContext);
     const {setAccount} = useContext(DataContext);
     const [open, setOpen] = useState(false);
@@ -35,6 +46,8 @@ const MentorPost = ({post, saved, mentorName, mentorTagline, mentorImage}) => {
         postLikes:[],
         postReposts:[],
         postComments:[],
+        postExams:[],
+        postSubjects:[],
         postTitle:'',
         postBody:'',
         postImage:'',
@@ -62,7 +75,10 @@ const MentorPost = ({post, saved, mentorName, mentorTagline, mentorImage}) => {
     setTempComment(comment)
     setOpen2(true);
 };
-
+const handleRadio = (e) => {
+        setTempPost({...tempPostState, postAccess: e.target.value})
+        
+}
 const handleClose2 = () => {
     setTempComment(commentInitialValues)
     setOpen2(false);
@@ -75,8 +91,29 @@ const handleClickOpen3 = (postId) => {
 const handleClose3 = () => {
     setOpen3(false);
 };
+const handleExamSelect = (e) => {
+       
+    setTempPost({...tempPostState, postExams:[...tempPostState.postExams, e.target.value]});
+    console.log(tempPostState)
+}
+const handleDeleteExam = (exam) => {
+    setTempPost({...tempPostState, postExams:tempPostState.postExams.filter((e)=>{
+        if(e !== exam) return e;
+    })});
+    console.log(tempPostState)
+}
+const handleSubjectSelect = (e) => {
+    setTempPost({...tempPostState, postSubjects:[...tempPostState.postSubjects, e.target.value]});
+    console.log(tempPostState)
+}
+const handleDeleteSubject = (exam) => {
+    setTempPost({...tempPostState, postSubjects:tempPostState.postSubjects.filter((e)=>{
+        if(e !== exam) return e;
+    })});
+    console.log(tempPostState)
+}
   const updatePost = async(postId) =>{
-    console.log(postState)
+    console.log(tempPostState)
     const settings = {
      method: "POST",
      body: JSON.stringify(tempPostState),
@@ -89,9 +126,10 @@ const handleClose3 = () => {
          console.log(settings.body)
          const fetchResponse = await fetch(`http://localhost:8000/updatepost?postId=${postId}`, settings);
          const response = await fetchResponse.json();
-         
-        setPost(tempPostState)
-        handleClose()
+         setPost(tempPostState)
+         handleClose()
+        
+        
      } catch (e) {
          
          return e;
@@ -237,6 +275,67 @@ const repostApi = async(postId)=> {
             return e;
         }    
 }
+const deletePost = async(postId) => {
+    const url = `http://localhost:8000/deletePost?jobId=${postId}&mentorAccountId=${account.id}`;
+    const settings = {
+    method: 'DELETE',
+    headers: {
+        accept: 'application/json',
+        authorization : getAccessToken()
+    }
+    };
+    try {
+        const fetchResponse = await fetch(url, settings);
+        const response = await fetchResponse.json();
+        navigate('/youropenings')
+        } catch (e) {
+        console.log(e);
+        }
+
+    }
+
+    const bookmarkPostApi = async(postId)=> {
+        const settings = {
+            method: "POST",
+            body: JSON.stringify({}),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                'authorization' : getAccessToken()
+            }
+            }
+            try {
+                console.log(settings.body)
+                const fetchResponse = await fetch(`http://localhost:8000/bookmarkPost?postId=${postId}&userAccountId=${account.id}&userRole=${account.role}`, settings);
+                const response = await fetchResponse.json();
+                setPost({...postState, postBookmarks:[...postState.postBookmarks, account.id]})
+               
+            } catch (e) {
+                return e;
+            }    
+    }
+
+    const removeBookmarkApi = async(postId)=> {
+        const settings = {
+            method: "DELETE",
+            body: JSON.stringify({}),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                'authorization' : getAccessToken()
+            }
+            }
+            try {
+                console.log(settings.body)
+                const fetchResponse = await fetch(`http://localhost:8000/removeBookmarkPost?postId=${postId}&userAccountId=${account.id}&userRole=${account.role}`, settings);
+                const response = await fetchResponse.json();
+                setPost({...postState, postBookmarks:postState.postBookmarks.filter((e) => {
+                    return e !== account.id
+                })})
+               
+            } catch (e) {
+                return e;
+            }    
+    }
+
 
 
   useEffect(() => {
@@ -269,6 +368,10 @@ const repostApi = async(postId)=> {
     storeImageAndGetLink();
   }, [imageFile])
 
+  useEffect(() => {
+    setPost(post)
+  }, [post])
+  
   
  
   
@@ -420,13 +523,41 @@ const repostApi = async(postId)=> {
                     marginLeft:'auto',
                     cursor:'pointer'
                 }}
-                onClick={() => {handleClickOpen()}}
+                
                 >
                     {
-                        account.role === 'mentor'?
-                        <EditOutlined />
+                        account.role === 'mentor' && postState.postAccountId === account.id?
+                        <>
+                        <EditOutlined style={{
+                            cursor:'pointer',
+                            
+                        }}
+                        onClick={() => {handleClickOpen()}}
+                        />
+                        <DeleteIcon style={{
+                            cursor:'pointer',
+                            marginLeft:'10px'
+                        }}
+                        onCLick = {() => {deletePost(postState._id)}}
+                        />
+                        </>
+                
                         :
-                        <BookmarkIcon/>
+                        postState.postBookmarks.includes(account.id) === true?
+                        <BookmarkIcon style={{
+                            cursor:'pointer',
+                            
+                        }}
+                        
+                            onClick = {() => {removeBookmarkApi(postState._id)}}
+                        />
+                        :
+                        <BookmarkBorderIcon style={{
+                            cursor:'pointer',
+                            
+                        }}
+                            onClick = {() => {bookmarkPostApi(postState._id)}}
+                        />
                     }
 
 
@@ -441,7 +572,198 @@ const repostApi = async(postId)=> {
                         marginTop:'10px',
                         fontSize:'15px'}}>
 
-                        {/* Start of school name */}
+                       
+
+
+                        <div>   
+                    <FormControl>
+                            <FormLabel id="demo-row-radio-buttons-group-label">Give access to</FormLabel>
+                            <RadioGroup
+                            onChange={(e) => {
+                                                    handleRadio(e);
+                                                }}
+                                row
+                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                name="row-radio-buttons-group"
+                            >
+                                <FormControlLabel value="For all" control={<Radio checked = {tempPostState.postAccess === 'For all'?true:false} />} label="For all" />
+                                <FormControlLabel value="Only mentees" control={<Radio checked = {tempPostState.postAccess === 'Only mentees'?true:false} />} label="Only mentees" />
+                                
+                                
+                            </RadioGroup>
+                    </FormControl>
+                        </div>
+                        <div style={{
+                display:'flex',
+                flexDirection:'column',
+                marginTop:'15px',
+            }}>
+                <div style={{
+                    color:'black'
+                }}>
+                    Select the exams
+                </div>
+
+                <div style={{
+                    width:500,
+                }}>
+                <FormControl fullWidth>
+                    
+                    <NativeSelect
+                        onChange={(e) => {
+                            handleExamSelect(e)
+                        }}
+                        value={tempPostState.postExams && tempPostState.postExams.length > 0 ? tempPostState.postExams[tempPostState.postExams.length-1]:''}
+                        defaultValue={30}
+                        inputProps={{
+                        name: 'age',
+                        id: 'uncontrolled-native',
+                        }}
+                    >
+                    {
+                        exams.map((exam) =>
+                        (
+                            <option  value={exam}>{exam}</option>
+                        ))
+                    
+                    }
+                        
+                    </NativeSelect>
+
+                </FormControl>
+                <div style={{
+                    display:'flex',
+                    flexDirection:'row',
+                    maxHeight:'100px',
+                    overflowY:'auto',
+                    flexWrap:'wrap'
+                }}>
+
+                        
+
+                {
+                    
+                   tempPostState.postExams && tempPostState.postExams.length>0?
+                   tempPostState.postExams.map((exam) =>
+                        (
+                        <div>
+                        <div  style={{
+                        background:'#27538b',
+                        color:'white',
+                        marginTop:'1px',
+                        borderRadius:'20px',
+                        width:'fit-content',
+                        padding:'5px',
+                        display:'flex',
+                        flexDirection:'row'
+                    }}>
+                            <div>
+                                {exam}
+                            </div>
+                            <div>
+                            <CloseIcon  onClick={() => {handleDeleteExam(exam)}} style={{
+                                cursor:'pointer'
+                            }}/>
+                            </div>
+                            </div>
+                        </div>
+                        ))
+                        :
+                        ''
+                }
+                    
+                        
+                   
+                </div>
+                </div>
+            </div>
+            <div style={{
+                display:'flex',
+                flexDirection:'column',
+                marginTop:'15px',
+               
+            }}>
+                <div style={{
+                    color:'black'
+                }}>
+                    Select the subjects
+                </div>
+
+                <div style={{
+                    width:500,
+                }}>
+                <FormControl fullWidth>
+                    
+                    <NativeSelect
+                        onChange={(e) => {
+                            handleSubjectSelect(e)
+                        }}
+                        value={tempPostState.postSubjects && tempPostState.postSubjects.length > 0 ? tempPostState.postSubjects[tempPostState.postSubjects.length-1]:''}
+                        defaultValue={30}
+                        inputProps={{
+                        name: 'age',
+                        id: 'uncontrolled-native',
+                        }}
+                    >
+                    {
+                        subjects.map((subject) =>
+                        (
+                            <option  value={subject}>{subject}</option>
+                        ))
+                    
+                    }
+                        
+                    </NativeSelect>
+
+                </FormControl>
+                <div style={{
+                    display:'flex',
+                    flexDirection:'row',
+                    maxHeight:'100px',
+                    overflowY:'auto',
+                    flexWrap:'wrap'
+                }}>
+
+                        
+
+                {
+                    
+                  tempPostState.postSubjects && tempPostState.postSubjects.length>0?  
+                  tempPostState.postSubjects.map((subject) =>
+                        (
+                        <div>
+                        <div  style={{
+                        background:'#27538b',
+                        marginTop:'1px',
+                        color:'white',
+                        borderRadius:'20px',
+                        width:'fit-content',
+                        padding:'5px',
+                        display:'flex',
+                        flexDirection:'row'
+                    }}>
+                            <div>
+                                {subject}
+                            </div>
+                            <div>
+                            <CloseIcon  onClick={() => {handleDeleteSubject(subject)}} style={{
+                                cursor:'pointer'
+                            }}/>
+                            </div>
+                            </div>
+                        </div>
+                        ))
+                        :
+                        ''
+                }
+                    
+                        
+                   
+                </div>
+                </div>
+            </div>
+
+
                     <div style={{
                         display:'flex',
                         flexDirection:'column',
@@ -561,8 +883,8 @@ const repostApi = async(postId)=> {
                     marginTop:'5px'
                 }}>
                     {
-                    postState.postBody.split("").length>394 &&textLimit===true?
-                    postState.postBody.slice(0, 393)
+                        postState.postBody.split("").length>394 &&textLimit===true?
+                        postState.postBody.slice(0, 393)
                     :
                     postState.postBody
                     }

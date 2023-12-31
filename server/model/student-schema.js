@@ -9,35 +9,22 @@ const studentSchema = mongoose.Schema({
         type:String,
         required:false
     },
+    studentEmail:{
+        type:String,
+        required:false
+    },
     studentContact:{
         type:String,
         required:false
     },
-    education :[{
-        schoolName : {
-            
-            type:String,
-            required:false,
-
-        },
-        course:{
-            type:String,
-            required:false,
-
-        },
-        startYear:{
-            type:Date,
-            required:false
-        },
-        finishYear:{ 
-            type:Date,
-            required:false
-        },
-        grade:{
-            type:String,
-            required:false
-        }
-}],
+    aboutYourself:{
+        type:String,
+        required:false
+    },
+    studentPlans:{
+        type:[String],
+        required:false
+    },
     studentExams:{
         type:[String],
         required:false
