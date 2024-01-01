@@ -4,7 +4,7 @@ import { authenticateToken } from "../controllers/token-controllers.js";
 import { addLikeController, createCommentController, createPostController, getAllPostsExceptYoursController, getCommentsController, getLikesController, getMentorProfileController, getPostsController, removeLikeController, repostPostController, updateMentorProfileController, updatePostController } from "../controllers/mentor-controllers.js";
 import { getImageController, uploadImageController } from "../controllers/image-controllers.js";
 import upload from "../middleware/upload.js";
-import { bookmarkPostController, getExploredPostsController, getStudentProfileController, removeBookmarkController, updateStudentProfileController } from "../controllers/student-controllers.js";
+import { bookmarkPostController, getBookmarkedPostsController, getExploredPostsController, getMentorsController, getStudentProfileController, removeBookmarkController, updateStudentProfileController } from "../controllers/student-controllers.js";
 const Router = express.Router();
 
 Router.post('/signup',signupUserController);
@@ -29,4 +29,6 @@ Router.get('/getStudentProfile',authenticateToken, getStudentProfileController);
 Router.post('/updateStudentProfile',authenticateToken, updateStudentProfileController);
 Router.post('/bookmarkPost', authenticateToken, bookmarkPostController)
 Router.delete('/removeBookmarkPost', authenticateToken, removeBookmarkController)
+Router.get('/getBookmarkedPosts', authenticateToken, getBookmarkedPostsController)
+Router.get('/getMentors', authenticateToken, getMentorsController)
 export default Router

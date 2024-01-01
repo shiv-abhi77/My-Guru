@@ -13,6 +13,8 @@ import CreatePost from './components/posts/CreatePost';
 import MentorPublicProfile from './components/profile/MentorPublicProfile';
 import StudentProfile from './components/profile/StudentProfile';
 import StudentExplore from './components/home/StudentExplore';
+import StudentBookmarked from './components/posts/StudentBookmarked';
+import FindMentors from './components/mentors/FindMentors';
 
 function App() {
   return (
@@ -29,8 +31,11 @@ function App() {
               <Route  path = '/mentor/profile' element = {<MentorProfile/>}/>
               <Route  path = '/student/profile' element = {<StudentProfile/>}/>
               <Route  path = '/student/explore' element = {<StudentExplore/>}/>
+              <Route path  = '/student/bookmarked' element = {<StudentBookmarked/>}/>
+              <Route path  = '/student/findmentors' element = {<FindMentors/>}/>
               <Route  path = '/mentor/posts' element = {<MentorPosts/>}/>
               <Route  path = '/mentor/createpost' element = {<CreatePost/>}/>
+              <Route  path = '/student/mentor/profile/:mentorAccountId' element = {<MentorPublicProfile/>}/>
               <Route  path = '/mentor/public' element = {<MentorPublicProfile/>}/>
             </Routes>
           </div>

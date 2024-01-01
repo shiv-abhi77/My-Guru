@@ -55,6 +55,7 @@ export const getExploredPostsController = async(request, response) => {
         let objArrayOfPosts = [];
         let student  = {}
         let mentor = {}
+        
         if(request.query.userRole === 'student'){
             student = await Student.findOne({studentAccountId:request.query.userAccountId})
             
@@ -360,3 +361,182 @@ export const removeBookmarkController = async(request, response) => {
         return response.status(500).json('failed bookmarking post')
     }
 }
+
+export const getBookmarkedPostsController = async(request, response) => {
+    try {
+        let result = []
+    let objArrayOfPosts = await Post.find({})
+    if(request.query.userRole === 'student'){
+        let student = await Student.findOne({studentAccountId:request.query.userAccountId})
+            if(student){
+                for(let i = 0;i<objArrayOfPosts.length;i++){
+                    if(student.studentSavedPosts.includes(objArrayOfPosts[i]._id)){
+                        let author = await Mentor.findOne({mentorAccountId:objArrayOfPosts[i].postAccountId})
+                        result.push({
+                            post:objArrayOfPosts[i],
+                            mentorName:author.mentorName,
+                            mentorImage:author.mentorImage,
+                            mentorTagline:author.mentorTagline,
+                        })
+                    }
+                }
+            }
+        }else if(request.query.userRole === 'mentor'){
+            let mentor = await Mentor.findOne({mentorAccountId:request.query.userAccountId})
+            if(mentor){
+                for(let i = 0;i<objArrayOfPosts.length;i++){
+                    if(mentor.mentorSavedPosts.includes(objArrayOfPosts[i]._id)){
+                        let author = await Mentor.findOne({mentorAccountId:objArrayOfPosts[i].postAccountId})
+                        result.push({
+                            post:objArrayOfPosts[i],
+                            mentorImage:author.mentorImage,
+                            mentorName:author.mentorName,
+                            mentorTagline:author.mentorTagline,
+                        })
+                    }
+                }
+            }
+        }
+        return response.status(200).json({data:result})
+    } catch (error) {
+        console.log(error)
+        return response.status(500).json({msg:'failed fetching bookmarks'})
+    }
+    
+    }
+
+
+    export const getMentorsController = async(request, response) => {
+        try {
+            let result = []
+            let objArrayOfMentors = await Mentor.find({})
+            
+            let student = {}
+            let mentor = {}
+            let queryExams = []
+            let querySubjects = []
+            let sortBy = ''
+            let searchQueryArray = []
+            if(request.query.searchQuery !== ''){
+                searchQueryArray = request.query.searchQuery.split(" ")
+            }
+            if(request.query.userRole === 'mentor'){
+                mentor = await Mentor.findOne({mentorAccountId:request.query.userAccountId})
+
+            }else{
+                student = await Student.findOne({studentAccountId:request.query.userAccountId})
+                
+            }
+            if(request.query.queryExams !== ''){
+                queryExams = request.query.queryExams.split(',')
+            }
+            if(request.query.querySubjects !== ''){
+                querySubjects = request.query.querySubjects.split(',')
+            }
+            if(request.query.sortBy !== ''){
+                sortBy = request.query.sortBy
+            }
+
+            if(queryExams.length > 0){
+                objArrayOfMentors = objArrayOfMentors.filter((e) => {
+                    for(let i = 0; i < queryExams.length;i++){
+                        return e.mentorExams.includes(queryExams[i])
+                    }
+                })
+            }else{
+                if(request.query.userRole === 'student'){
+                    if(student.studentExams.length > 0){
+                    objArrayOfMentors = objArrayOfMentors.filter((e) => {
+                        for(let i = 0; i < student.studentExams.length;i++){
+                            return e.mentorExams.includes(queryExams[i])
+                        }
+                    })
+                }
+                    
+                }else if(request.query.userRole === 'mentor'){
+                    if(mentor.mentorExams.length > 0){
+                    objArrayOfMentors = objArrayOfMentors.filter((e) => {
+                        for(let i = 0; i < mentor.mentorExams.length;i++){
+                            return e.mentorExams.includes(queryExams[i])
+                        }
+                    })
+                }
+            }
+            }
+
+            if(querySubjects.length > 0){
+                objArrayOfMentors = objArrayOfMentors.filter((e) => {
+                    for(let i = 0; i < querySubjects.length;i++){
+                        return e.mentorSubjects.includes(querySubjects[i])
+                    }
+                })
+            }else{
+                if(request.query.userRole === 'student'){
+                    if(student.studentSubjects.length > 0){
+                    objArrayOfMentors = objArrayOfMentors.filter((e) => {
+                        for(let i = 0; i < student.studentSubjects.length;i++){
+                            return e.mentorSubjects.includes(querySubjects[i])
+                        }
+                    })
+                }
+                }else if(request.query.userRole === 'mentor'){
+                    if(mentor.mentorSubjects.length > 0){
+                    objArrayOfMentors = objArrayOfMentors.filter((e) => {
+                        for(let i = 0; i < mentor.mentorSubjects.length;i++){
+                            return e.mentorSubjects.includes(querySubjects[i])
+                        }
+                    })
+                }
+            }
+            }
+            if(searchQueryArray.length > 0){
+                
+                objArrayOfMentors = objArrayOfMentors.filter((e) => {
+                    for(let i = 0; i<searchQueryArray.length;i++){
+                        return e.mentorName.toLowerCase().includes(searchQueryArray[i].toLowerCase())
+                    }
+                })
+            }
+            if(sortBy === 'Rating'){
+                objArrayOfMentors = objArrayOfMentors.sort((a, b) => {
+                    return a.rating - b.rating;
+                })
+            }else if(sortBy === 'No. of students'){
+                objArrayOfMentors = objArrayOfMentors.sort((a, b) => {
+                    return a.mentorFollowers.length - b.mentorFollowers.length
+                })
+            }
+
+            // filtering of mentors who havent set their profile name
+            objArrayOfMentors = objArrayOfMentors.filter((e) => {
+                return e.mentorName !== ''
+            })
+
+
+            for(let i = 0; i<objArrayOfMentors.length;i++){
+                if(queryExams.length === 0 && querySubjects.length === 0){
+                    if(request.query.userRole === 'student' && student.studentExams.length === 0 && student.studentSubjects.length ===0){
+                        if(result.length === 5) break
+                    }else if(request.query.userRole === 'mentor' && mentor.mentorExams.length === 0 && mentor.mentorSubjects.length ===0){
+                        if(result.length === 5) break
+                    }
+                }
+                result.push({
+                    mentorAccountId:objArrayOfMentors[i].mentorAccountId,
+                    mentorName:objArrayOfMentors[i].mentorName,
+                    mentorTagline:objArrayOfMentors[i].mentorTagline,
+                    mentorImage:objArrayOfMentors[i].mentorImage,
+                    mentorExams:objArrayOfMentors[i].mentorExams,
+                    mentorSubjects:objArrayOfMentors[i].mentorSubjects,
+                    mentorRating:objArrayOfMentors[i].rating,
+                    mentorStudentsCount:objArrayOfMentors[i].mentorFollowers.length
+
+                })
+            }
+            return response.status(200).json({data:result})
+
+        } catch (error) {
+            console.log(error)
+            return response.status(500).json({msg:'failed fetching mentors'})
+        }
+    }

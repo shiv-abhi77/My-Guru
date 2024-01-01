@@ -29,7 +29,8 @@ import { useState, useEffect, useContext } from "react"
 import { DataContext } from "../../context/DataProvider"
 
 const PublicMentorProfile = () => {
-  const { id } = useParams();
+  const { mentorAccountId } = useParams();
+
   const {account}=useContext(DataContext);
   const {setAccount} = useContext(DataContext);
 
@@ -58,7 +59,8 @@ const [mentor, setMentor] = useState(mentorObjInitial)
 
   useEffect(() => {
     const myFunction = async() => {
-      const url = `http://localhost:8000/getMentorProfile?mentorAccountId=${account.id}`;
+
+      const url = `http://localhost:8000/getMentorProfile?mentorAccountId=${mentorAccountId !== null?mentorAccountId:account.id}`;
       const settings = {
       method: 'GET',
       headers: {
@@ -231,7 +233,7 @@ return (
             {mentor.mentorName}
           </Typography>
           <Typography variant="subtitle1" style={{ color: '#555', marginBottom: '10px' }}>
-            Mentor ID: {id}
+            Mentor ID: {mentorAccountId}
           </Typography>
 
           {/* Blue color link for Contact Details */}
