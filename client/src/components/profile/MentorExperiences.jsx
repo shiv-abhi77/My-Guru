@@ -27,7 +27,9 @@ import NativeSelect from '@mui/material/NativeSelect';
 import { Link } from 'react-router-dom';
 import monthMap from '../../constants/monthMap.js';
 import subjects from '../../constants/subjects.js';
+import { useLocation } from 'react-router-dom';
 const MentorExperiences = ({mentor, onUpdate}) =>{
+    const location  = useLocation();
     const {account}=useContext(DataContext);
     const {setAccount} = useContext(DataContext);
     const workObjInitial = {
@@ -179,7 +181,9 @@ const deleteProjectApi = () => {
                 
                 </div>
                 {
-                    account.role !== 'company'?
+                    location.pathname.includes('public') === true || account.id !== mentor.mentorAccountId?
+                    <div></div>
+                :
 
                     <div onClick={handleClickOpen} style={{
                     marginLeft:'auto',
@@ -192,8 +196,6 @@ const deleteProjectApi = () => {
                 }}>
                 <AddCircleOutlineIcon/> Add New
                 </div>
-                    :
-                    <div></div>
                     }
                 
 
@@ -496,7 +498,9 @@ const deleteProjectApi = () => {
                             </div>
 
                             {
-                            account.role !== 'company'?
+                                location.pathname.includes('public') === true || account.id !== mentor.mentorAccountId?
+                    <div></div>
+                :
 
                             <div style={{
                             marginLeft:'auto',
@@ -516,8 +520,6 @@ const deleteProjectApi = () => {
                         >
                             <EditOutlinedIcon/> Edit
                             </div>
-                            :
-                            <div></div>
                             }
                             
 

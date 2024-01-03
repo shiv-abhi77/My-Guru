@@ -21,18 +21,34 @@ const studentSchema = mongoose.Schema({
         type:String,
         required:false
     },
-    studentPlans:{
-        type:[String],
-        required:false
-    },
+    studentPlans:[{
+        planId:{
+            type:String,
+            required:false
+        },
+        purchaseDate:{
+            type:Date,
+            required:false
+        },
+        active:{
+            type:Boolean,
+            required:false
+        }
+    }],
     studentExams:{
         type:[String],
         required:false
     },
-    studentMentors:{
-        type:[String],
-        required:false
-    },
+    studentMentors:[{
+        mentorAccountId:{
+            type:String,
+            required:false
+        },
+        status:{
+            type:Boolean,
+            required:false
+        }
+    }],
     studentSavedPosts:{
         type:[String],
         required:false

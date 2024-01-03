@@ -271,3 +271,4 @@ export const deletePostController = async(request, response) => {
         return response.status(500).json('failed posts fetching');
     }
 }
+

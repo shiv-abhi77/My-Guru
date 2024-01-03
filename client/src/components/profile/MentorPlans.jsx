@@ -26,9 +26,11 @@ import { useContext } from 'react';
 import NativeSelect from '@mui/material/NativeSelect';
 import subjects from '../../constants/subjects.js';
 import { Link } from 'react-router-dom';
-
+import { useLocation } from 'react-router-dom';
 import monthMap from '../../constants/monthMap.js';
+
 const MentorPlans = ({mentor, onUpdate}) =>{
+    const location  = useLocation();
     const {account}=useContext(DataContext);
     const {setAccount} = useContext(DataContext);
     const planObjInitial = {
@@ -37,6 +39,7 @@ const MentorPlans = ({mentor, onUpdate}) =>{
         posts:'',
         otherPerks:'',
         price:0,
+        students:[],
         _id:''
     }
     const [open, setOpen] = useState(false);
@@ -141,7 +144,25 @@ const editPlanApi = async(field, id) => {
 const deleteProjectApi = () => {
 
 }
-
+const makePaymentApi = async(planId, studentAccountId, mentorAccountId) => {
+    const settings = {
+        method: "POST",
+        body: JSON.stringify({}),
+        headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            'authorization' : getAccessToken()
+        }
+        }
+        try {
+           
+            const fetchResponse = await fetch(`http://localhost:8000/create-checkout-session?planId=${planId}&studentAccountId=${studentAccountId}&mentorAccountId=${mentorAccountId}`, settings);
+            const response = await fetchResponse.json();
+            console.log(response.url)
+            window.location = response.url
+        } catch (e) {
+            return e;
+        }
+}
 
 
     return(
@@ -178,7 +199,9 @@ const deleteProjectApi = () => {
                 
                 </div>
                 {
-                    account.role === 'mentor'?
+                    location.pathname.includes('public') === true || account.id !== mentor.mentorAccountId?
+                    <div></div>
+                :
                     <div onClick={handleClickOpen} style={{
                     marginLeft:'auto',
                     marginRight:'0px',
@@ -190,8 +213,6 @@ const deleteProjectApi = () => {
                 }}>
                 <AddCircleOutlineIcon/> Add New
                 </div>
-                :
-                <div></div>
                 }
                 
 
@@ -386,6 +407,7 @@ const deleteProjectApi = () => {
                         <div style={{
                             display:'flex',
                             flexDirection:'row',
+                            
 
                         }}>
                         <div style={{
@@ -441,7 +463,28 @@ const deleteProjectApi = () => {
                             
 
                             {
-                                account.role === 'mentor'?
+                                location.pathname.includes('public') === true || account.id !== mentor.mentorAccountId?
+                                <div style={{
+                            marginLeft:'auto',
+                            marginRight:'0px',
+                            borderRadius:'5px',
+                            border: '1px solid #142683',
+                            background:'green',
+                            padding: '10px 10px 10px 10px',
+                            color:'white',
+                            fontSize:'16px',
+                            fontWeight:'700',
+                            height:'fit-content',
+                            cursor:'pointer',
+                        }}
+                        onClick={() => {
+                            makePaymentApi(plan._id, account.id, mentor.mentorAccountId)
+                            
+                        }}
+                        >
+                            Buy Plan
+                            </div>
+                :
                                 <div style={{
                             marginLeft:'auto',
                             marginRight:'0px',
@@ -460,8 +503,6 @@ const deleteProjectApi = () => {
                         >
                             <EditOutlinedIcon/> Edit
                             </div>
-                            :
-                            <div></div>
                             }
                             
 

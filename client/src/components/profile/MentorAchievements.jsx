@@ -26,9 +26,10 @@ import { useContext } from 'react';
 import NativeSelect from '@mui/material/NativeSelect';
 import subjects from '../../constants/subjects.js';
 import { Link } from 'react-router-dom';
-
+import { useLocation } from 'react-router-dom';
 import monthMap from '../../constants/monthMap.js';
 const MentorAchievements = ({mentor, onUpdate}) =>{
+    const location  = useLocation();
     const {account}=useContext(DataContext);
     const {setAccount} = useContext(DataContext);
     const achievementObjInitial = {
@@ -174,8 +175,10 @@ const deleteProjectApi = () => {
                 
                 </div>
                 {
-                    account.role !== 'company'?
-                    <div onClick={handleClickOpen} style={{
+                    location.pathname.includes('public') === true || account.id !== mentor.mentorAccountId?
+                    <div></div>
+                :
+                <div onClick={handleClickOpen} style={{
                     marginLeft:'auto',
                     marginRight:'0px',
                     borderRadius:'5px',
@@ -186,8 +189,6 @@ const deleteProjectApi = () => {
                 }}>
                 <AddCircleOutlineIcon/> Add New
                 </div>
-                :
-                <div></div>
                 }
                 
 
@@ -285,7 +286,9 @@ const deleteProjectApi = () => {
                             </div>
 
                             {
-                                account.role !== 'company'?
+                                location.pathname.includes('public') === true || account.id !== mentor.mentorAccountId?
+                    <div></div>
+                :
                                 <div style={{
                             marginLeft:'auto',
                             marginRight:'0px',
@@ -304,8 +307,7 @@ const deleteProjectApi = () => {
                         >
                             <EditOutlinedIcon/> Edit
                             </div>
-                            :
-                            <div></div>
+                            
                             }
                             
 

@@ -24,10 +24,16 @@ const mentorSchema = mongoose.Schema({
         type:[String],
         required:false
     },
-    mentorFollowers:{
-        type:[String],
-        required:false
-    },
+    mentorFollowers:[{
+        studentAccountId:{
+            type:String,
+            required:false
+        },
+        status:{
+            type:Boolean,
+            required:false
+        }
+    }],
     mentorPosts:{
         type:[String],
         required:false
@@ -54,10 +60,17 @@ const mentorSchema = mongoose.Schema({
                 type:Number,
                 required:false
             },
-            planSold:{
-                type:Number,
-                required:false
-            }
+            students:[{
+                studentAccountId:{
+                    type:String,
+                    required:false
+                },
+                status:{
+                    type:Boolean,
+                    required:false
+                }
+            }],
+            
 
         }
     ],

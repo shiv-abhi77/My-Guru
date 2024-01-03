@@ -7,6 +7,7 @@ import bodyParser from 'body-parser';
 dotenv.config();
 
 const app = express();
+app.use('/payment/post/update', express.raw({ type: 'application/json' }));
 app.use(bodyParser.json({extended:true}))
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(cors());

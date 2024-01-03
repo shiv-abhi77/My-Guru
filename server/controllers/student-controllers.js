@@ -6,7 +6,9 @@ import token from '../model/token-schema.js'
 import Student from '../model/student-schema.js';
 import Post from '../model/post-schema.js';
 import Comment from '../model/comment-schema.js';
+import Stripe from 'stripe';
 
+dotenv.config()
 export const getStudentProfileController = async(request, response) => {
     
     try{
@@ -540,3 +542,149 @@ export const getBookmarkedPostsController = async(request, response) => {
             return response.status(500).json({msg:'failed fetching mentors'})
         }
     }
+
+export const paymentController = async(request, response) => {
+        try {
+            const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY);
+            let plan = {}
+            let planId = ''
+            let planToShowToUser = {}
+            let student = await Student.findOne({studentAccountId:request.query.studentAccountId})
+            let mentor = await Mentor.findOne({mentorAccountId:request.query.mentorAccountId})
+            if(mentor && student){
+                for(let i = 0;i<mentor.mentorPlans.length;i++){
+                    if(request.query.planId === mentor.mentorPlans[i]._id.toString()){
+                        plan = mentor.mentorPlans[i]
+                        planToShowToUser = {
+                            videoCalls:plan.videoCalls,
+                            streams:plan.streams,
+                            posts:plan.posts,
+                            otherPerks:plan.otherPerks,
+                            price:plan.price
+                        }
+                        planId = plan._id.toString()
+                        break
+                    }
+                }
+                console.log(plan)
+                if(plan !== null && planToShowToUser !== null && planId !== ''){
+                    let customer = {}
+                    if(student.customerId === '' || !student.customerId){
+                        customer = await stripe.customers.create({
+                        name: student.studentName !== ''?student.studentName:'tempname',
+                        email: 'jennyrosen@example.com',
+                        address:{"city":"kota","country":"india","line1":"unr","line2":"kota","postal_code":"324002","state":"rajasthan"},
+                      });
+                    }
+                    
+                    
+                    const session = await stripe.checkout.sessions.create({
+                        metadata : {
+                               studentAccountId: student.studentAccountId,
+                               mentorAccountId : mentor.mentorAccountId,
+                               planId:planId
+                        },  
+                        customer:(!student.customerId || student.customerId === '') === true ? student.customerId:customer.id,
+                              
+                        payment_method_types:['card'],
+                        mode:'payment',
+                        line_items:[{
+                            price_data:{
+                                currency:"inr",
+                                product_data:{
+                                    name:`Video calls: ${plan.videoCalls}, Streams: ${plan.streams}, Posts/Articles:${plan.posts},  Other perks: ${plan.otherPerks}`
+                                },
+                                unit_amount:plan.price*100,
+                            },
+                            quantity:1
+                        }],
+                        success_url:`${process.env.CLIENT_URL}/public/success.html`,
+                        cancel_url:`${process.env.CLIENT_URL}/public/cancel.html`,
+                    })
+                    console.log(session)
+                    return  response.status(200).json({url:session.url})
+                }
+                
+              
+            }   
+        } catch (error) {
+            console.log(error)
+            response.status(500).json({msg:error.message})
+        }
+} 
+
+
+export const postPaymentController = async(request, response) => {
+    try {
+        console.log('ooooooooooooooooooooooo')
+    const sig = request.headers['stripe-signature'];
+    const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY);
+    const endpointSecret = process.env.ENDPOINT_SECRET_KEY
+    let event;
+        event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
+        switch (event.type) {
+            case 'payment_intent.succeeded':
+              const paymentIntent = event.data.object;
+              console.log(paymentIntent.metadata)
+              // Then define and call a method to handle the successful payment intent.
+              // handlePaymentIntentSucceeded(paymentIntent);
+              break;
+              case 'checkout.session.completed':
+              const intent = event.data.object;
+              console.log(intent.metadata)
+              let mentorAccountId = intent.metadata.mentorAccountId
+              let studentAccountId = intent.metadata.studentAccountId
+              let planId = intent.metadata.planId
+              if(mentorAccountId && studentAccountId && planId){
+                let student = await Student.findOne({studentAccountId:studentAccountId})
+                let mentor = await Mentor.findOne({mentorAccountId:mentorAccountId})
+                if(student && mentor){
+                    const options = { new: true };
+                    student.studentMentors.push({
+                        mentorAccountId:mentorAccountId,
+                        status:true
+                    })
+                    student.studentPlans.push({
+                        planId:planId,
+                        purchaseDate:new Date(),
+                        active:true
+                    })
+                    mentor.mentorFollowers.push({
+                        studentAccountId:studentAccountId,
+                        status:true
+                    })
+                    for(let i = 0;i<mentor.mentorPlans.length;i++){
+                        if(mentor.mentorPlans[i]._id.toString() === planId){
+                            mentor.mentorPlans[i].students.push({
+                                studentAccountId:studentAccountId,
+                                status:true
+                            })
+                            console.log(mentor.mentorPlans[i])
+                            break
+                        }
+                    }
+                    console.log(student)
+                    
+                    // student  = await Student.findOneAndUpdate({studentAccountId:studentAccountId}, student, options)
+                    // mentor  = await Mentor.findOneAndUpdate({mentorAccountId:mentorAccountId}, mentor, options)
+                }
+              }
+
+
+              // Then define and call a method to handle the successful payment intent.
+              // handlePaymentIntentSucceeded(paymentIntent);
+              break;
+            case 'payment_method.attached':
+              const paymentMethod = event.data.object;
+              // Then define and call a method to handle the successful attachment of a PaymentMethod.
+              // handlePaymentMethodAttached(paymentMethod);
+              break;
+            // ... handle other event types
+            default:
+              console.log(`Unhandled event type ${event.type}`);
+          }
+    } catch (error) {
+        console.log(error)
+        response.status(500).json({msg:error.message})
+    }
+}

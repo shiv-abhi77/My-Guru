@@ -24,7 +24,9 @@ import { DataContext } from '../../context/DataProvider.jsx';
 import dayjs from 'dayjs';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useContext } from 'react';
+import { useLocation } from 'react-router-dom';
 const MentorEducation = ({mentor, onUpdate}) =>{
+    const location  = useLocation();
     const {account}=useContext(DataContext);
     const {setAccount} = useContext(DataContext);
     const educationObjInitial = {
@@ -165,7 +167,9 @@ const deleteEducationApi = () => {
                 
                 </div>
                 {
-                    account.role !== 'company'?
+                    location.pathname.includes('public') === true || account.id !== mentor.mentorAccountId?
+                    <div></div>
+                :
                     <div onClick={handleClickOpen} style={{
                     marginLeft:'auto',
                     marginRight:'0px',
@@ -177,9 +181,6 @@ const deleteEducationApi = () => {
                 }}>
                 <AddCircleOutlineIcon/> Add New
                 </div>
-
-                    :
-                    <div></div>
                     }
                 
 
@@ -387,7 +388,9 @@ const deleteEducationApi = () => {
                         </div>
                         </div>
                         {
-                            account.role !== 'company'?
+                            location.pathname.includes('public') === true || account.id !== mentor.mentorAccountId?
+                    <div></div>
+                :
                             <div style={{
                             marginLeft:'auto',
                             marginRight:'0px',
@@ -406,9 +409,6 @@ const deleteEducationApi = () => {
                         >
                             <EditOutlinedIcon/> Edit
                             </div>
-
-                            :
-                            <div></div>
                             }
                         
                             <Dialog open={open2} onClose={handleClose2}>

@@ -1,5 +1,6 @@
 import React from 'react';
 import MentorSidebar from "../sidebar/MentorSidebar";
+import StudentSidebar from "../sidebar/StudentSidebar.jsx"
 import {
     Box,
     Typography,
@@ -23,6 +24,7 @@ import MentorStatistics from "./MentorStatistics.jsx";
 import MentorReviews from "./MentorReviews.jsx";
 import MentorPlans from "./MentorPlans.jsx";
 import mentor from "./MentorProfile.jsx";
+
 import { useState, useEffect, useContext } from "react"
 
 
@@ -212,7 +214,10 @@ const handleCloseDialog = () => {
 return (
   <>
     <div style={{ display: 'flex', flexDirection: 'row' }}>
-      <MentorSidebar />
+    {
+      account.role === 'mentor' ?   <MentorSidebar /> :  <StudentSidebar/>
+    }
+      
       <div style={{ display: 'flex', flexDirection: 'column', width: '100%', fontFamily: 'DM Sans' }}>
         {/* Cover Picture */}
         <div style={{ position: 'relative', height: '200px', background: '#2bedbc', marginBottom: '20px' }}>
