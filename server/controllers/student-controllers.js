@@ -363,17 +363,39 @@ export const getYourMentorsController = async(request, response) => {
 
 export const getYourPlansController = async(request, response) => {
     try {
-        let result = []
+        let activeSubscriptions = []
+        let result  = []
         const options = { new: true };
-        let activeSubscriptions = await Subscription.find({studentAccountId:request.query.studentAccountId, status:true})
-        for(let i = 0; i< activeSubscriptions.length;i++){
-            let timeDifference = moment(new Date(activeSubscriptions[i].purchaseTimestamp)).from(new Date())
+        let studentSubscriptions = await Subscription.find({studentAccountId:request.query.studentAccountId, status:true})
+        for(let i = 0; i< studentSubscriptions.length;i++){
+            let timeDifference = moment(new Date(studentSubscriptions[i].purchaseTimestamp)).from(new Date())
             if(timeDifference.includes('month') || timeDifference.includes('year')){
-                activeSubscriptions[i].status = false
-                await Subscription.findOneAndUpdate({_id:activeSubscriptions[i]._id.toString()}, activeSubscriptions[i], options)
+                studentSubscriptions[i].status = false
+                await Subscription.findOneAndUpdate({_id:studentSubscriptions[i]._id.toString()}, studentSubscriptions[i], options)
             }else{
-                result.push(activeSubscriptions[i])
+                activeSubscriptions.push(studentSubscriptions[i])
             }
+        }
+
+        for(let i = 0;i<studentSubscriptions.length;i++){
+            let mentor = await Mentor.findOne({mentorAccountId:studentSubscriptions[i].mentorAccountId})
+            let plan = {}
+            for(let i = 0;i<mentor.mentorPlans.length;i++){
+                if(mentor.mentorPlans[i]._id.toString() === studentSubscriptions[i].planId){
+                    plan = mentor.mentorPlans[i]
+                    break
+                }
+            }
+            result.push({
+                videoCalls:plan.videoCalls,
+                streams:plan.streams,
+                posts:plan.posts,
+                otherPerks:plan.otherPerks,
+                price:plan.price,
+                amount:studentSubscriptions[i].amount,
+                purchaseTimestamp:studentSubscriptions[i].purchaseTimestamp,
+                mentorAccountId:mentor.mentorAccountId
+            })
         }
         return response.status(200).json({data:result})
     } catch (error) {
@@ -674,12 +696,12 @@ export const paymentController = async(request, response) => {
             let mentor = await Mentor.findOne({mentorAccountId:request.query.mentorAccountId})
 
             if(mentor && student){
-                let studentSubscriptions = await Subscription({mentorAccountId:mentor.mentorAccountId, studentAccountId:student.studentAccountId, status:true})
+                let studentSubscriptions = await Subscription.find({mentorAccountId:mentor.mentorAccountId, studentAccountId:student.studentAccountId, status:true})
                 let paymentAllowOrNot = true
                 for(let i = 0;i<studentSubscriptions.length;i++){
                     let timeDifference = moment(new Date(studentSubscriptions[i].purchaseTimestamp)).from(new Date())
 
-                    //paymentAllowOrNot will be set to false, if there is atleast one subscription that is still ongoing
+                    //paymentAllowOrNot will be set to false, if there is atleast one subscription that is still ongoing 
                     if(timeDifference.includes('month') || timeDifference.includes('year')){
                         studentSubscriptions[i].status = false
                         await Subscription.findOneAndUpdate({_id:studentSubscriptions[i]._id.toString()}, studentSubscriptions[i], options)

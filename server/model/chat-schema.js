@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 const chatSchema = mongoose.Schema({
 
-    mentorId:{
+    mentorAccountId:{
         type:String,
         required:false
     },
-    studentId:{
+    studentAccountId:{
         type:String,
         required:false
     },

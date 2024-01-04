@@ -156,10 +156,12 @@ const makePaymentApi = async(planId, studentAccountId, mentorAccountId) => {
            
             const fetchResponse = await fetch(`http://localhost:8000/create-checkout-session?planId=${planId}&studentAccountId=${studentAccountId}&mentorAccountId=${mentorAccountId}`, settings);
             const response = await fetchResponse.json();
-            console.log(response.url)
+            
             if(response.msg === 'payment not allowed'){
                 return
             }
+            console.log(response.url)
+            
             window.location = response.url
         } catch (e) {
             return e;
