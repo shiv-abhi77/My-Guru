@@ -6,7 +6,7 @@ import token from '../model/token-schema.js'
 import Student from '../model/student-schema.js';
 import Post from '../model/post-schema.js';
 import Comment from '../model/comment-schema.js';
-
+import Subscription from '../model/subscription-schema.js';
 export const getMentorProfileController = async(request, response) => {
     
     try{

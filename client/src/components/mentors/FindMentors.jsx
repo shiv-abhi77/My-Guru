@@ -108,7 +108,7 @@ const FindMentors = () => {
                 <div style={{
                 width:'100%',
                 display:'flex',
-                
+                flexDirection:'row',
                 fontFamily:'DM Sans'
                 }}>     
 

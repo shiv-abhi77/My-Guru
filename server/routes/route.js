@@ -4,7 +4,7 @@ import { authenticateToken } from "../controllers/token-controllers.js";
 import { addLikeController, createCommentController, createPostController, getAllPostsExceptYoursController, getCommentsController, getLikesController, getMentorProfileController, getPostsController, removeLikeController, repostPostController, updateMentorProfileController, updatePostController } from "../controllers/mentor-controllers.js";
 import { getImageController, uploadImageController } from "../controllers/image-controllers.js";
 import upload from "../middleware/upload.js";
-import { bookmarkPostController, getBookmarkedPostsController, getExploredPostsController, getMentorsController, getStudentProfileController, paymentController, postPaymentController, removeBookmarkController, updateStudentProfileController } from "../controllers/student-controllers.js";
+import { bookmarkPostController, getBookmarkedPostsController, getExploredPostsController, getForYouPostsController, getMentorsController, getStudentProfileController, getYourMentorsController, getYourPlansController, paymentController, postPaymentController, removeBookmarkController, updateStudentProfileController } from "../controllers/student-controllers.js";
 const Router = express.Router();
 
 Router.post('/signup',signupUserController);
@@ -33,4 +33,8 @@ Router.get('/getBookmarkedPosts', authenticateToken, getBookmarkedPostsControlle
 Router.get('/getMentors', authenticateToken, getMentorsController)
 Router.post('/create-checkout-session', authenticateToken, paymentController)
 Router.post('/payment/post/update', postPaymentController)
+Router.get('/getForYouPosts', authenticateToken, getForYouPostsController)
+Router.get('/getYourMentors', authenticateToken, getYourMentorsController)
+Router.get('/getYourPlans', authenticateToken, getYourPlansController)
+
 export default Router

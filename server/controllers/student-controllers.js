@@ -7,7 +7,8 @@ import Student from '../model/student-schema.js';
 import Post from '../model/post-schema.js';
 import Comment from '../model/comment-schema.js';
 import Stripe from 'stripe';
-
+import Subscription from '../model/subscription-schema.js';
+import moment from 'moment'
 dotenv.config()
 export const getStudentProfileController = async(request, response) => {
     
@@ -261,6 +262,127 @@ export const getExploredPostsController = async(request, response) => {
         return response.status(500).json('failed posts explore');
     }
 }
+
+export const getForYouPostsController = async(request, response) => {
+    try {
+        let result = []
+        let activeMentorIdList = []
+        let postsToFetch = []
+        const options = { new: true };
+        let activeSubscriptions = await Subscription.find({studentAccountId:request.query.studentAccountId, status:true})
+        
+        for(let i = 0; i< activeSubscriptions.length;i++){
+            let timeDifference = moment(new Date(activeSubscriptions[i].purchaseTimestamp)).from(new Date())
+            console.log(timeDifference)
+            if(timeDifference.includes('month') || timeDifference.includes('year')){
+                activeSubscriptions[i].status = false
+                await Subscription.findOneAndUpdate({_id:activeSubscriptions[i]._id.toString()}, activeSubscriptions[i], options)
+            }else{
+                activeMentorIdList.push(activeSubscriptions[i].mentorAccountId)
+            }
+        }
+        //removing duplicate mentors
+        activeMentorIdList.filter((mentorAccountId, index) => {
+        return  activeMentorIdList.indexOf(mentorAccountId) === index; 
+        })
+
+        for(let i = 0;i < activeMentorIdList.length;i++){
+            let mentor = await Mentor.findOne({mentorAccountId:activeMentorIdList[i]})
+            if(mentor){
+            for(let i = 0; i<mentor.mentorPosts.length;i++){
+                postsToFetch.push(mentor.mentorPosts[i])
+            }
+            if(postsToFetch.length > 0){
+                for(let j = 0;j<postsToFetch.length;j++){
+                    let post = await Post.findOne({_id:postsToFetch[j]})
+                    if(post){
+                        result.push({
+                            post:post,
+                            mentorName:mentor.mentorName,
+                            mentorTagline:mentor.mentorTagline,
+                            mentorImage:mentor.mentorImage,
+                        })
+                }
+                }
+            }
+            postsToFetch = []
+        }
+        }
+        return response.status(200).json({data:result})
+    } catch (error) {
+        console.log(error.message)
+        return response.status(500).json({msg:'failed fetching for you posts'})
+    }
+}
+
+export const getYourMentorsController = async(request, response) => {
+    try {
+        let result = []
+        let activeMentorIdList = []        
+        
+        const options = { new: true };
+        let activeSubscriptions = await Subscription.find({studentAccountId:request.query.studentAccountId, status:true})
+        for(let i = 0; i< activeSubscriptions.length;i++){
+            let timeDifference = moment(new Date(activeSubscriptions[i].purchaseTimestamp)).from(new Date())
+            if(timeDifference.includes('month') || timeDifference.includes('year')){
+                activeSubscriptions[i].status = false
+                await Subscription.findOneAndUpdate({_id:activeSubscriptions[i]._id.toString()}, activeSubscriptions[i], options)
+            }else{
+                activeMentorIdList.push(activeSubscriptions[i].mentorAccountId)
+            }
+        }
+        //removing duplicate mentors
+        activeMentorIdList.filter((mentorAccountId, index) => {
+        return  activeMentorIdList.indexOf(mentorAccountId) === index; 
+        })
+
+        for(let i = 0; i<activeMentorIdList.length;i++){
+            let mentor = await Mentor.findOne({mentorAccountId:activeMentorIdList[i]})
+            if(mentor){
+                result.push({
+                    mentorAccountId:mentor.mentorAccountId,
+                    mentorName:mentor.mentorName,
+                    mentorTagline:mentor.mentorTagline,
+                    mentorImage:mentor.mentorImage,
+                    mentorExams:mentor.mentorExams,
+                    mentorSubjects:mentor.mentorSubjects,
+                    mentorRating:mentor.rating,
+                    mentorStudentsCount:0
+        
+                })
+            }
+        }
+        return response.status(200).json({data:result})
+
+        
+    } catch (error) {
+        console.log(error.message)
+        return response.status(500).json({msg:'failed fetching your mentors'})
+    }
+}
+
+export const getYourPlansController = async(request, response) => {
+    try {
+        let result = []
+        const options = { new: true };
+        let activeSubscriptions = await Subscription.find({studentAccountId:request.query.studentAccountId, status:true})
+        for(let i = 0; i< activeSubscriptions.length;i++){
+            let timeDifference = moment(new Date(activeSubscriptions[i].purchaseTimestamp)).from(new Date())
+            if(timeDifference.includes('month') || timeDifference.includes('year')){
+                activeSubscriptions[i].status = false
+                await Subscription.findOneAndUpdate({_id:activeSubscriptions[i]._id.toString()}, activeSubscriptions[i], options)
+            }else{
+                result.push(activeSubscriptions[i])
+            }
+        }
+        return response.status(200).json({data:result})
+    } catch (error) {
+        console.log(error.message)
+        return response.status(200).json({msg:'failed fetching plans'})
+    }
+}
+
+
 
 export const bookmarkPostController = async(request, response) => {
         try {
@@ -531,8 +653,7 @@ export const getBookmarkedPostsController = async(request, response) => {
                     mentorExams:objArrayOfMentors[i].mentorExams,
                     mentorSubjects:objArrayOfMentors[i].mentorSubjects,
                     mentorRating:objArrayOfMentors[i].rating,
-                    mentorStudentsCount:objArrayOfMentors[i].mentorFollowers.length
-
+                    mentorStudentsCount:0
                 })
             }
             return response.status(200).json({data:result})
@@ -551,7 +672,13 @@ export const paymentController = async(request, response) => {
             let planToShowToUser = {}
             let student = await Student.findOne({studentAccountId:request.query.studentAccountId})
             let mentor = await Mentor.findOne({mentorAccountId:request.query.mentorAccountId})
+
             if(mentor && student){
+                // let studentSubscriptions = await Subscription({mentorAccountId:mentor.mentorAccountId, studentAccountId:student.studentAccountId, status:true})
+
+
+
+
                 for(let i = 0;i<mentor.mentorPlans.length;i++){
                     if(request.query.planId === mentor.mentorPlans[i]._id.toString()){
                         plan = mentor.mentorPlans[i]
@@ -569,7 +696,7 @@ export const paymentController = async(request, response) => {
                 console.log(plan)
                 if(plan !== null && planToShowToUser !== null && planId !== ''){
                     let customer = {}
-                    if(student.customerId === '' || !student.customerId){
+                    if(student.payerId === '' || !student.payerId){
                         customer = await stripe.customers.create({
                         name: student.studentName !== ''?student.studentName:'tempname',
                         email: 'jennyrosen@example.com',
@@ -584,7 +711,7 @@ export const paymentController = async(request, response) => {
                                mentorAccountId : mentor.mentorAccountId,
                                planId:planId
                         },  
-                        customer:(!student.customerId || student.customerId === '') === true ? student.customerId:customer.id,
+                        customer:(!student.payerId || student.payerId === '') === true ? customer.id:student.payerId,
                               
                         payment_method_types:['card'],
                         mode:'payment',
@@ -615,6 +742,7 @@ export const paymentController = async(request, response) => {
 
 
 export const postPaymentController = async(request, response) => {
+    
     try {
         console.log('ooooooooooooooooooooooo')
     const sig = request.headers['stripe-signature'];
@@ -631,44 +759,53 @@ export const postPaymentController = async(request, response) => {
               break;
               case 'checkout.session.completed':
               const intent = event.data.object;
-              console.log(intent.metadata)
+              console.log(intent)
+              
               let mentorAccountId = intent.metadata.mentorAccountId
               let studentAccountId = intent.metadata.studentAccountId
               let planId = intent.metadata.planId
+              let amount = intent.amount_total
               if(mentorAccountId && studentAccountId && planId){
-                let student = await Student.findOne({studentAccountId:studentAccountId})
-                let mentor = await Mentor.findOne({mentorAccountId:mentorAccountId})
-                if(student && mentor){
-                    const options = { new: true };
-                    student.studentMentors.push({
-                        mentorAccountId:mentorAccountId,
-                        status:true
-                    })
-                    student.studentPlans.push({
-                        planId:planId,
-                        purchaseDate:new Date(),
-                        active:true
-                    })
-                    mentor.mentorFollowers.push({
+                    const newSubscription = new Subscription({
                         studentAccountId:studentAccountId,
-                        status:true
+                        mentorAccountId:mentorAccountId,
+                        planId:planId,
+                        purchaseTimestamp:new Date(),
+                        status:true,
+                        amount:amount/100
                     })
-                    for(let i = 0;i<mentor.mentorPlans.length;i++){
-                        if(mentor.mentorPlans[i]._id.toString() === planId){
-                            mentor.mentorPlans[i].students.push({
-                                studentAccountId:studentAccountId,
-                                status:true
-                            })
-                            console.log(mentor.mentorPlans[i])
-                            break
-                        }
-                    }
-                    console.log(student)
+                    await newSubscription.save()
+                    return response.status(200).json({msg:'payment done and details saved success'})
+                    // const options = { new: true };
+                    // student.studentMentors.push({
+                    //     mentorAccountId:mentorAccountId,
+                    //     status:true
+                    // })
+                    // student.studentPlans.push({
+                    //     planId:planId,
+                    //     purchaseDate:new Date(),
+                    //     active:true
+                    // })
+                    // mentor.mentorFollowers.push({
+                    //     studentAccountId:studentAccountId,
+                    //     status:true
+                    // })
+                    // for(let i = 0;i<mentor.mentorPlans.length;i++){
+                    //     if(mentor.mentorPlans[i]._id.toString() === planId){
+                    //         mentor.mentorPlans[i].students.push({
+                    //             studentAccountId:studentAccountId,
+                    //             status:true
+                    //         })
+                    //         console.log(mentor.mentorPlans[i])
+                    //         break
+                    //     }
+                    // }
+                    // console.log(student)
                     
                     // student  = await Student.findOneAndUpdate({studentAccountId:studentAccountId}, student, options)
                     // mentor  = await Mentor.findOneAndUpdate({mentorAccountId:mentorAccountId}, mentor, options)
                 }
-              }
+              
 
 
               // Then define and call a method to handle the successful payment intent.

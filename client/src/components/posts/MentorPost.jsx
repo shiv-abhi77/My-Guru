@@ -28,6 +28,7 @@ import exams from '../../constants/exams';
 import CloseIcon from '@mui/icons-material/Close';
 import NativeSelect from '@mui/material/NativeSelect';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import moment from 'moment'
 import { cleanDigitSectionValue } from '@mui/x-date-pickers/internals/hooks/useField/useField.utils';
 const MentorPost = ({post, mentorName, mentorTagline, mentorImage}) => {
     const navigate = useNavigate()
@@ -41,6 +42,7 @@ const MentorPost = ({post, mentorName, mentorTagline, mentorImage}) => {
     const [tempComment, setTempComment] = useState({})
     const [postComments, setPostComments] = useState([])
     const [postLikesArray, setPostLikes] = useState([])
+    
     const postInitialValues = {
         postAccountId:account.id,
         postLikes:[],
@@ -335,8 +337,12 @@ const deletePost = async(postId) => {
                 return e;
             }    
     }
-
-
+    // post time stamp difference
+    const postTimestamp = new Date(postState.postTimestamp);
+    const currentTime = new Date();
+    const timeDifference = moment(postTimestamp).from(currentTime);
+    console.log(timeDifference);
+    
 
   useEffect(() => {
     const storeImageAndGetLink = async() => {
@@ -470,51 +476,7 @@ const deletePost = async(postId) => {
                         fontSize:'12px',
                         color:"rgba(0, 0, 0, 0.6)"
                     }}>
-                        Posted {
-                            Math.abs(new Date(postState.postTimestamp).getFullYear() - new Date().getFullYear()) === 0?
-                            Math.abs(new Date(postState.postTimestamp).getMonth() - new Date().getMonth()) === 0 ?
-                            Math.abs(new Date(postState.postTimestamp).getMinutes() - new Date().getMinutes()) === 0 ?
-                            Math.abs(new Date(postState.postTimestamp).getSeconds() - new Date().getSeconds()) :
-                            Math.abs(new Date(postState.postTimestamp).getMinutes() - new Date().getMinutes()) :
-                            Math.abs(new Date(postState.postTimestamp).getHours() - new Date().getHours()):
-                            Math.abs(new Date(postState.postTimestamp).getDate() - new Date().getDate()) === 1 ?
-                            Math.abs(new Date(postState.postTimestamp).getHours() - new Date().getHours()) < 24 ?
-                            Math.abs(new Date(postState.postTimestamp).getHours() - new Date().getHours()) === 0 ?
-                            Math.abs(new Date(postState.postTimestamp).getMinutes() - new Date().getMinutes()) === 0 ?
-                            Math.abs(new Date(postState.postTimestamp).getSeconds() - new Date().getSeconds()) :
-                            Math.abs(new Date(postState.postTimestamp).getMinutes() - new Date().getMinutes()) :
-                            Math.abs(new Date(postState.postTimestamp).getHours() - new Date().getHours()):
-                            '1':
-                            Math.abs(new Date(postState.postTimestamp).getDate() - new Date().getDate()) < 7 ?
-                            Math.abs(new Date(postState.postTimestamp).getDate() - new Date().getDate()) :
-                            Math.abs(new Date(postState.postTimestamp).getDate() - new Date().getDate()) < 30 ?
-                            Math.abs(new Date(postState.postTimestamp).getDate() - new Date().getDate())/7 :
-                            Math.abs(new Date(postState.postTimestamp).getDate() - new Date().getDate()) < 365 ?
-                            Math.abs(new Date(postState.postTimestamp).getDate() - new Date().getDate())/365:
-                            ''
-                            
-                        }{Math.abs(new Date(postState.postTimestamp).getDate() - new Date().getDate()) === 0?
-                            Math.abs(new Date(postState.postTimestamp).getHours() - new Date().getHours()) === 0 ?
-                            Math.abs(new Date(postState.postTimestamp).getMinutes() - new Date().getMinutes()) === 0 ?
-                            ' sec' :
-                            ' min' :
-                            ' hr':
-                            Math.abs(new Date(postState.postTimestamp).getDate() - new Date().getDate()) === 1 ?
-                            Math.abs(new Date(postState.postTimestamp).getHours() - new Date().getHours()) < 24 ?
-                            Math.abs(new Date(postState.postTimestamp).getHours() - new Date().getHours()) === 0 ?
-                            Math.abs(new Date(postState.postTimestamp).getMinutes() - new Date().getMinutes()) === 0 ?
-                            ' sec' :
-                            ' min' :
-                            ' hr':
-                            ' days' :
-                            Math.abs(new Date(postState.postTimestamp).getDate() - new Date().getDate()) < 7 ?
-                            ' weeks':
-                            Math.abs(new Date(postState.postTimestamp).getDate() - new Date().getDate()) < 30 ?
-                            ' weeks' :
-                            Math.abs(new Date(postState.postTimestamp).getDate() - new Date().getDate()) < 365 ?
-                            ' years':
-                            ''
-                            } ago
+                        Posted {timeDifference} 
                     </div>
                 </div>
                 

@@ -72,6 +72,10 @@ const studentSchema = mongoose.Schema({
     ratingGiven:{
         type:[String],
         required:false
+    },
+    payerId:{
+        type:String,
+        required:false
     }
 
 

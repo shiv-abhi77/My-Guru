@@ -21,6 +21,8 @@ import HomeIcon from '@mui/icons-material/Home';
 import ExploreIcon from '@mui/icons-material/Explore';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
+import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
+import CardMembershipIcon from '@mui/icons-material/CardMembership';
 const drawerWidth = 240;
 export default function StudentSidebar() {
   const navigate  = useNavigate();
@@ -51,7 +53,7 @@ export default function StudentSidebar() {
         
       <Divider style={{backgroundColor:'#00ecff'}} />
         <List>
-          {["Home","Explore", "Find Mentors", "Your Mentors", "Bookmarked"].map((text, index) => (
+          {["Home","For You","Explore", "Find Mentors", "Your Mentors","Your Plans", "Bookmarked"].map((text, index) => (
             <ListItem key={text} disablePadding>
 
 
@@ -66,15 +68,24 @@ export default function StudentSidebar() {
               </ListItemButton> 
               :
               index === 1 ?
-              <ListItemButton onClick={() => { if(location.pathname.includes('/student/explore') === false) navigate('/student/explore')}} >
+              <ListItemButton onClick={() => { if(location.pathname.includes('/student/foryou') === false) navigate('/student/foryou')}} >
                 <ListItemIcon style={{ color: '#00ecff' }} >
-                   <ExploreIcon/>
+                   
+                <DynamicFeedIcon/>
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>
-              
               :
               index === 2 ?
+              <ListItemButton onClick={() => { if(location.pathname.includes('/student/explore') === false) navigate('/student/explore')}} >
+                <ListItemIcon style={{ color: '#00ecff' }} >
+                <ExploreIcon/>
+                
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItemButton>
+              :
+              index === 3 ?
               <ListItemButton onClick={() => { if(location.pathname.includes('/student/findmentors') === false) navigate('/student/findmentors')}} >
                 <ListItemIcon style={{ color: '#00ecff' }} >
                    <FindInPageIcon/>
@@ -82,7 +93,7 @@ export default function StudentSidebar() {
                 <ListItemText primary={text} />
               </ListItemButton>
               :
-              index === 3 ?
+              index === 4 ?
               <ListItemButton onClick={() => { if(location.pathname.includes('/student/yourmentors') === false) navigate('/student/yourmentors')}} >
                 <ListItemIcon style={{ color: '#00ecff' }} >
                    <PeopleIcon/>
@@ -91,7 +102,15 @@ export default function StudentSidebar() {
               </ListItemButton>
               
               :
-              index === 4 ?
+              index === 5 ?
+              <ListItemButton onClick={() => { if(location.pathname.includes('/student/yourplans') === false) navigate('/student/yourplans')}} >
+                <ListItemIcon style={{ color: '#00ecff' }} >
+                   <CardMembershipIcon/>
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItemButton>
+              :
+              index === 6 ?
               <ListItemButton onClick={() => { if(location.pathname.includes('/student/bookmarked') === false) navigate('/student/bookmarked')}} >
                 <ListItemIcon style={{ color: '#00ecff' }} >
                    <BookmarkIcon/>

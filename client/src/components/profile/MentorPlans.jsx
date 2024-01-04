@@ -39,7 +39,6 @@ const MentorPlans = ({mentor, onUpdate}) =>{
         posts:'',
         otherPerks:'',
         price:0,
-        students:[],
         _id:''
     }
     const [open, setOpen] = useState(false);

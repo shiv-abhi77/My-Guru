@@ -1,38 +1,37 @@
-import MentorSidebar from "../sidebar/MentorSidebar"
-import { useState, useEffect, useContext } from "react"
-import { useNavigate, useParams, Link } from "react-router-dom"
+import { useState, useContext, useEffect } from "react"
+import { useParams, useLocation, Link, useNavigate } from "react-router-dom"
+import StudentSidebar from "../sidebar/StudentSidebar"
+import MentorPost from "../posts/MentorPost"
 import { DataContext } from "../../context/DataProvider"
-import { getAccessToken } from "../../utils/util.js"
-import MentorPost from "./MentorPost.jsx"
-
-const MentorPosts = () => {
+import { getAccessToken } from "../../utils/util"
+const StudentForYou = () => {
+    const navigate = useNavigate()
     const {account}=useContext(DataContext);
-    const {setAccount} = useContext(DataContext);
-    const [posts, setPosts] = useState({})
+    const [posts, setPosts] = useState([])
     useEffect(() => {
         const myFunction = async() => {
-        const url = `http://localhost:8000/getPosts?mentorAccountId=${account.id}`;
-        const settings = {
-        method: 'GET',
-        headers: {
-            accept: 'application/json',
-            authorization : getAccessToken()
-        }
-        };
-        try {
-            const fetchResponse = await fetch(url, settings);
-            const response = await fetchResponse.json();
-            setPosts(response);
-            
-            } catch (e) {
-            console.log(e);
+            const url = `http://localhost:8000/getForYouPosts?studentAccountId=${account.id}`;
+            const settings = {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                authorization : getAccessToken()
             }
-    
-        }
+            };
+            try {
+                const fetchResponse = await fetch(url, settings);
+                const response = await fetchResponse.json();
+                setPosts(response.data);
+                
+                } catch (e) {
+                console.log(e);
+                }
         
-        myFunction()
+            }
+            
+            myFunction()
     }, [])
-
+    
 
     return(
         <>
@@ -41,7 +40,7 @@ const MentorPosts = () => {
             flexDirection:'row',
             
           }}>
-                <MentorSidebar/>
+                <StudentSidebar/>
                 <div style={{
                 width:'100%',
                 display:'flex',
@@ -55,11 +54,11 @@ const MentorPosts = () => {
         }}>
 
         {
-            posts.objArrayOfPosts && posts.objArrayOfPosts.length > 0 ? posts.objArrayOfPosts.map(post => (
-                        <MentorPost  post = {post}
-                            mentorName={posts.mentorName}
-                            mentorTagline={posts.mentorTagline}
-                            mentorImage = {posts.mentorImage}
+            posts && posts.length > 0 ? posts.map(post => (
+                        <MentorPost  post = {post.post}
+                            mentorName={post.mentorName}
+                            mentorTagline={post.mentorTagline}
+                            mentorImage = {post.mentorImage}
                             
                             // onUpdate={(post) => {
                             //     for(let i = 0; i< posts.objArrayOfPosts.length;i++){
@@ -85,5 +84,4 @@ const MentorPosts = () => {
         </>
     )
 }
-
-export default MentorPosts
+export default StudentForYou

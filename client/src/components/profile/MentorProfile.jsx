@@ -111,7 +111,6 @@ const MentorProfile = () => {
                 mentorImage:'',
                 mentorExams:[],
                 mentorSubjects:[],
-                mentorFollowers:[],
                 mentorPosts:[],
                 mentorPlans:[],
                 education:[],
