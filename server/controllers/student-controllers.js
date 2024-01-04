@@ -674,11 +674,22 @@ export const paymentController = async(request, response) => {
             let mentor = await Mentor.findOne({mentorAccountId:request.query.mentorAccountId})
 
             if(mentor && student){
-                // let studentSubscriptions = await Subscription({mentorAccountId:mentor.mentorAccountId, studentAccountId:student.studentAccountId, status:true})
+                let studentSubscriptions = await Subscription({mentorAccountId:mentor.mentorAccountId, studentAccountId:student.studentAccountId, status:true})
+                let paymentAllowOrNot = true
+                for(let i = 0;i<studentSubscriptions.length;i++){
+                    let timeDifference = moment(new Date(studentSubscriptions[i].purchaseTimestamp)).from(new Date())
 
+                    //paymentAllowOrNot will be set to false, if there is atleast one subscription that is still ongoing
+                    if(timeDifference.includes('month') || timeDifference.includes('year')){
+                        studentSubscriptions[i].status = false
+                        await Subscription.findOneAndUpdate({_id:studentSubscriptions[i]._id.toString()}, studentSubscriptions[i], options)
+                    }else{
+                        paymentAllowOrNot = false
+                        return response.status(400).json({msg:'payment not allowed'})
+                    }
+                }
 
-
-
+                if(paymentAllowOrNot === true){
                 for(let i = 0;i<mentor.mentorPlans.length;i++){
                     if(request.query.planId === mentor.mentorPlans[i]._id.toString()){
                         plan = mentor.mentorPlans[i]
@@ -734,6 +745,7 @@ export const paymentController = async(request, response) => {
                 
               
             }   
+        }
         } catch (error) {
             console.log(error)
             response.status(500).json({msg:error.message})
