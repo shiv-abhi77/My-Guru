@@ -77,7 +77,7 @@ const StudentPlans = () => {
                         <div style={{
                             display:'flex',
                             flexDirection:'column',
-                            border:'1px solid #ebf0f5',
+                            border:'3px solid rgb(195 195 195)',
                             padding: '30px 30px 30px 45px',
                             marginTop:'10px'
                         }}>

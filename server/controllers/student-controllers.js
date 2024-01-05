@@ -9,6 +9,7 @@ import Comment from '../model/comment-schema.js';
 import Stripe from 'stripe';
 import Subscription from '../model/subscription-schema.js';
 import moment from 'moment'
+import Chat from '../model/chat-schema.js';
 dotenv.config()
 export const getStudentProfileController = async(request, response) => {
     
@@ -319,7 +320,6 @@ export const getYourMentorsController = async(request, response) => {
     try {
         let result = []
         let activeMentorIdList = []        
-        
         const options = { new: true };
         let activeSubscriptions = await Subscription.find({studentAccountId:request.query.studentAccountId, status:true})
         for(let i = 0; i< activeSubscriptions.length;i++){
@@ -339,20 +339,26 @@ export const getYourMentorsController = async(request, response) => {
         for(let i = 0; i<activeMentorIdList.length;i++){
             let mentor = await Mentor.findOne({mentorAccountId:activeMentorIdList[i]})
             if(mentor){
+                let chat = await Chat.findOne({mentorAccountId:mentor.mentorAccountId, studentAccountId:request.query.studentAccountId})
                 result.push({
-                    mentorAccountId:mentor.mentorAccountId,
-                    mentorName:mentor.mentorName,
-                    mentorTagline:mentor.mentorTagline,
-                    mentorImage:mentor.mentorImage,
-                    mentorExams:mentor.mentorExams,
-                    mentorSubjects:mentor.mentorSubjects,
-                    mentorRating:mentor.rating,
-                    mentorStudentsCount:0
-        
+                    mentor:{
+                        mentorAccountId:mentor.mentorAccountId,
+                        mentorName:mentor.mentorName,
+                        mentorTagline:mentor.mentorTagline,
+                        mentorImage:mentor.mentorImage,
+                        mentorExams:mentor.mentorExams,
+                        mentorSubjects:mentor.mentorSubjects,
+                        mentorRating:mentor.rating,
+                        mentorStudentsCount:0
+                    },
+                    chatId:chat._id.toString()
                 })
+                
             }
         }
-        return response.status(200).json({data:result})
+        return response.status(200).json({
+            data:result
+        })
 
         
     } catch (error) {
@@ -401,6 +407,35 @@ export const getYourPlansController = async(request, response) => {
     } catch (error) {
         console.log(error.message)
         return response.status(200).json({msg:'failed fetching plans'})
+    }
+}
+
+export const getChatMessagesController = async(request, response) => {
+    try {
+        let result = []
+        const options = { new: true };
+        let chat = await Chat.findOne({_id:request.query.chatId})
+        result = chat.messages
+        return response.status(200).json({data:result})
+    } catch (error) {
+        console.log(error.message)
+        return response.status(500).json({msg:'failed fetching chat messages'})
+    }
+}
+
+export const updateChatMessagesController = async(request, response) => {
+    try {
+        const options = { new: true };
+        let chat = await Chat.findOne({_id:request.query.chatId})
+        if(chat){
+            chat.messages.push(request.body.newMessage)
+            await Chat.findOneAndUpdate({_id:request.query.chatId}, chat, options )
+            return response.status(200).json({msg:'success saving new message'})
+        }
+        
+    } catch (error) {
+        console.log(error.message)
+        return response.status(500).json({msg:'update chat messages'})
     }
 }
 
@@ -809,6 +844,12 @@ export const postPaymentController = async(request, response) => {
                         amount:amount/100
                     })
                     await newSubscription.save()
+                    const newChat = new Chat({
+                        mentorAccountId:mentorAccountId,
+                        studentAccountId:studentAccountId,
+                        messages:[]
+                    })
+                    await newChat.save()
                     return response.status(200).json({msg:'payment done and details saved success'})
                     // const options = { new: true };
                     // student.studentMentors.push({

@@ -8,7 +8,7 @@ const StudentMentors = () => {
     const navigate = useNavigate()
     const {account}=useContext(DataContext);
     const {setAccount} = useContext(DataContext);
-    const [mentors, setMentors] = useState([])
+    const [data, setData] = useState([])
     useEffect(() => {
         const myFunction = async() => {
             const url = `http://localhost:8000/getYourMentors?studentAccountId=${account.id}`;
@@ -23,7 +23,7 @@ const StudentMentors = () => {
                     const fetchResponse = await fetch(url, settings);
                     const response = await fetchResponse.json();
                     console.log(response.data)
-                    setMentors(response.data);
+                    setData(response.data);
                     
                     } catch (e) {
                     console.log(e);
@@ -56,11 +56,61 @@ const StudentMentors = () => {
                         width:'80%',
                     }}>
          {
-                mentors && mentors.length > 0 ? mentors.map(e => (
-                    <div onClick={() => {navigate(`/student/mentor/profile/${e.mentorAccountId}`)}}>
-                    
-                            <MentorItem  mentor = {e}
-                            />
+                data && data.length > 0 ? data.map(e => (
+                    <div >
+                            <div style={{
+                                display:'flex',
+                                flexDirection:'column'
+                            }}>
+                                <div onClick={() => {navigate(`/student/mentor/profile/${e.mentor.mentorAccountId}`)}} >
+                                    <MentorItem  mentor = {e.mentor}/>
+                                </div>
+                                
+                                
+                                <div style={{
+                                    display:'flex',
+                                    flexDirection:'row',
+                                    background:'#f2f2f2',
+                                    borderRadius:'5px',
+                                    padding:'5px',
+                                    
+                                }}>
+                                    <div style={{
+                                        borderRadius:'5px',
+                                        border: '1px solid #142683',
+                                        background:'green',
+                                        padding: '5px 5px 5px 5px',
+                                        color:'white',
+                                        fontSize:'16px',
+                                        fontWeight:'500',
+                                        height:'fit-content',
+                                        cursor:'pointer',
+                                    }}
+                                    onClick={() => {navigate(`/student/chats/${e.chatId}`)}}
+                                    >
+                            Chats
+                            </div>
+
+                                    <div style={{
+                                        marginLeft:'auto',
+                                        marginRight:'0px',
+                                        borderRadius:'5px',
+                                        border: '1px solid #142683',
+                                        background:'green',
+                                        padding: '5px 5px 5px 5px',
+                                        color:'white',
+                                        fontSize:'16px',
+                                        fontWeight:'500',
+                                        height:'fit-content',
+                                        cursor:'pointer',
+                                    }}
+                                    onClick={() => {}}
+                                    >
+                            Video Call
+                            </div>
+                                </div>
+                            </div>
+                            
                     </div>
                 ))
                 :

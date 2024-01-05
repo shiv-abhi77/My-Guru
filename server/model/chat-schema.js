@@ -8,13 +8,25 @@ const chatSchema = mongoose.Schema({
     studentAccountId:{
         type:String,
         required:false
-    },
+    }, 
     messages:[{
         senderRole:{
             type:String,
             required:false
         },
+        senderAccountId:{
+            type:String,
+            required:false,
+        },
         messageBody:{
+            type:String,
+            required:false
+        },
+        messageType:{
+            type:String,
+            required:false
+        },
+        messageMediaLink:{
             type:String,
             required:false
         },
