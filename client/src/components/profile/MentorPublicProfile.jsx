@@ -1,6 +1,5 @@
 import React from 'react';
 import MentorSidebar from "../sidebar/MentorSidebar";
-import StudentSidebar from "../sidebar/StudentSidebar.jsx"
 import {
     Box,
     Typography,
@@ -24,11 +23,43 @@ import MentorStatistics from "./MentorStatistics.jsx";
 import MentorReviews from "./MentorReviews.jsx";
 import MentorPlans from "./MentorPlans.jsx";
 import mentor from "./MentorProfile.jsx";
-
+import { styled } from '@mui/material/styles';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import PropTypes from 'prop-types';
 import { useState, useEffect, useContext } from "react"
 
 
 import { DataContext } from "../../context/DataProvider"
+
+
+
+function CustomTabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 0 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+CustomTabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
 
 const PublicMentorProfile = () => {
   const { mentorAccountId } = useParams();
@@ -59,149 +90,97 @@ const PublicMentorProfile = () => {
 }
 const [mentor, setMentor] = useState(mentorObjInitial)
 
-  useEffect(() => {
-    const myFunction = async() => {
+useEffect(() => {
+  const myFunction = async() => {
 
-      const url = `http://localhost:8000/getMentorProfile?mentorAccountId=${mentorAccountId !== null?mentorAccountId:account.id}`;
-      const settings = {
-      method: 'GET',
-      headers: {
-          accept: 'application/json',
-          authorization : getAccessToken()
-      }
-      };
-      try {
-        const fetchResponse = await fetch(url, settings);
-        const response = await fetchResponse.json();
-        setMentor(response);
-          } catch (e) {
-          console.log(e);
-          }
+    const url = `http://localhost:8000/getMentorProfile?mentorAccountId=${mentorAccountId && mentorAccountId.length > 0 ?mentorAccountId:account.id}`;
+    const settings = {
+    method: 'GET',
+    headers: {
+        accept: 'application/json',
+        authorization : getAccessToken()
     }
-    myFunction();
-  }, [])
-
-//   return (
-//     <>
-//       <div style={{ display: 'flex', flexDirection: 'row' }}>
-//         <MentorSidebar />
-//         <div style={{ display: 'flex', flexDirection: 'column', width: '100%', fontFamily: 'DM Sans' }}>
-//           {/* Cover Picture */}
-//           <div style={{ height: '150px', background: '#2bedbc', position: 'relative' }}>
-//             {/* You can add cover picture here */}
-//           </div>
-
-//           <div style={{ display: 'flex', justifyContent: 'center', position: 'relative', top: '-80px' }}>
-//             {/* Circular Profile Picture */}
-//             <Avatar
-//               alt={mentor.mentorName}
-//               src={mentor.mentorImage ? mentor.mentorImage : 'https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png'}
-//               sx={{ width: 150, height: 150, border: '5px solid #fff' }}
-//             />
-//           </div>
-
-//           <Paper style={{ padding: '20px', marginTop: '20px' }}>
-//             <Typography variant="h5" style={{ textAlign: 'center', marginBottom: '10px' }}>
-//               {mentor.mentorName}
-//             </Typography>
-//             <Typography variant="subtitle1" style={{ color: '#555', textAlign: 'center', marginBottom: '10px' }}>
-//               Mentor ID: {id}
-//             </Typography>
-
-//             {/* Display other non-editable information */}
-//             <Typography variant="subtitle1" gutterBottom>
-//               Email: {mentor.mentorEmail}
-//             </Typography>
-//             <Typography variant="subtitle1" gutterBottom>
-//               Contact: {mentor.mentorContact}
-//             </Typography>
-//             <Typography variant="subtitle1" gutterBottom>
-//               Tagline: {mentor.mentorTagline}
-//             </Typography>
-//             {/* ... Display other non-editable information ... */}
-//             <Divider style={{ margin: '20px 0' }} />
-//             {/* Display other non-editable sections like Exams, Subjects, etc. */}
-//             <MentorEducation mentor={mentor} />
-//             <MentorExperiences mentor={mentor} />
-//             <MentorAchievements mentor={mentor} />
-//             <MentorStatistics mentor={mentor} />
-//             <MentorReviews mentor={mentor} />
-//             <MentorPlans mentor={mentor} />
-//           </Paper>
-//         </div>
-//       </div>
-//     </>
-//   );
-// };
+    };
+    try {
+      const fetchResponse = await fetch(url, settings);
+      const response = await fetchResponse.json();
+      setMentor(response);
+        } catch (e) {
+        console.log(e);
+        }
+  }
+  myFunction();
+}, [])
 
 
-//   return (
-//     <>
-//       <div style={{ display: 'flex', flexDirection: 'row' }}>
-//         <MentorSidebar />
-//         <div
-//           style={{
-//             display: 'flex',
-//             width: '100%',
-//             fontFamily: 'DM Sans',
-//             padding: '20px',
-//           }}
-//         >
-//           <Grid container spacing={3}>
-//             <Grid item xs={12} md={3}>
-//               <Paper style={{ padding: '20px', textAlign: 'center' }}>
-//                 <Avatar
-//                   alt={mentor.mentorName}
-//                   src={mentor.mentorImage ? mentor.mentorImage : 'https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png'}
-//                   sx={{ width: 150, height: 150 }}
-//                 />
-//                 <Typography variant="h5" style={{ marginTop: '10px' }}>
-//                   {mentor.mentorName}
-//                 </Typography>
-//                 <Typography variant="subtitle1" style={{ color: '#555', marginTop: '5px' }}>
-//                   Mentor ID: {id}
-//                 </Typography>
-//               </Paper>
-//             </Grid>
-//             <Grid item xs={12} md={9}>
-//               <Paper style={{ padding: '20px' }}>
-//                 <Typography variant="h4" gutterBottom>
-//                   Public Profile of <strong>{mentor.mentorName} </strong>
-//                 </Typography>
-//                 {/* Display other non-editable information */}
-//                 <Typography variant="subtitle1" gutterBottom>
-//                   Email: {mentor.mentorEmail}
-//                 </Typography>
-//                 <Typography variant="subtitle1" gutterBottom>
-//                   Contact: {mentor.mentorContact}
-//                 </Typography>
-//                 <Typography variant="subtitle1" gutterBottom>
-//                   Tagline: {mentor.mentorTagline}
-//                 </Typography>
-//                 {/* ... Display other non-editable information ... */}
-//                 <Divider style={{ margin: '20px 0' }} />
-//                 {/* Display other non-editable sections like Exams, Subjects, etc. */}
-//                 <MentorEducation mentor={mentor} />
-//                 <MentorExperiences mentor={mentor} />
-//                 <MentorAchievements mentor={mentor} />
-//                 <MentorStatistics mentor={mentor} />
-//                 <MentorReviews mentor={mentor} />
-//                 <MentorPlans mentor={mentor} />
-//               </Paper>
-//             </Grid>
-//           </Grid>
-//         </div>
-//       </div>
-//     </>
-//   );
-
-// //    return(
-// //     <div>
-// //         hello
-// //     </div>
-// //    )
-// };
 const [openDialog, setOpenDialog] = React.useState(false);
+
+
+
+const StyledTab = styled((props) => <Tab disableRipple {...props} />)(
+  ({ theme }) => ({
+    textTransform: 'none',
+    fontWeight: theme.typography.fontWeightRegular,
+    fontSize: theme.typography.pxToRem(15),
+    marginRight: theme.spacing(1),
+    color: 'rgba(255, 25, 255, 0.7)',
+    '&.Mui-selected': {
+      color: 'rgba(25, 255, 25, 0.7)',
+    },
+    '&.Mui-focusVisible': {
+      backgroundColor: 'rgba(100, 95, 28, 0.32)',
+    },
+  }),
+);
+
+const StyledTabs = styled((props) => (
+  <Tabs
+    {...props}
+    TabIndicatorProps={{ children: <span className="MuiTabs-indicatorSpan" /> }}
+  />
+))({
+  '& .MuiTabs-indicator': {
+    display: 'flex',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+  },
+  '& .MuiTabs-indicatorSpan': {
+    maxWidth: 60,
+    width: '100%',
+    backgroundColor: '#2bedbc',
+  },
+});
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
+const [value, setValue] = useState(0)
+
+
+const handleChange = (event, newValue) => {
+    setValue(newValue);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const handleContactDetails = () => {
   setOpenDialog(true);
@@ -211,13 +190,13 @@ const handleCloseDialog = () => {
   setOpenDialog(false);
 };
 
+
 return (
   <>
+
+  
     <div style={{ display: 'flex', flexDirection: 'row' }}>
-    {
-      account.role === 'mentor' ?   <MentorSidebar /> :  <StudentSidebar/>
-    }
-      
+      <MentorSidebar />
       <div style={{ display: 'flex', flexDirection: 'column', width: '100%', fontFamily: 'DM Sans' }}>
         {/* Cover Picture */}
         <div style={{ position: 'relative', height: '200px', background: '#2bedbc', marginBottom: '20px' }}>
@@ -238,7 +217,7 @@ return (
             {mentor.mentorName}
           </Typography>
           <Typography variant="subtitle1" style={{ color: '#555', marginBottom: '10px' }}>
-            Mentor ID: {mentorAccountId}
+            Mentor ID: {mentorAccountId && mentorAccountId.length > 0 ?mentorAccountId:account.id}
           </Typography>
 
           {/* Blue color link for Contact Details */}
@@ -247,20 +226,132 @@ return (
           </Typography>
         </Paper>
 
-        {/* Education details below the cover picture */}
-        <Paper style={{ padding: '20px', marginBottom: '20px' }}>
+        {/* Education details below the cover picture 
+         <Paper style={{ padding: '20px', marginBottom: '20px' }}>
           <Typography variant="h6" gutterBottom>
             Education
           </Typography>
           <MentorEducation mentor={mentor} />
         </Paper>
 
-        {/* Display other non-editable sections like Exams, Subjects, etc. */}
-        <MentorExperiences mentor={mentor} />
+         <MentorExperiences mentor={mentor} />
         <MentorAchievements mentor={mentor} />
         <MentorStatistics mentor={mentor} />
         <MentorReviews mentor={mentor} />
-        <MentorPlans mentor={mentor} />
+        <MentorPlans mentor={mentor} /> 
+        */}
+       
+
+
+
+    { <Box sx={{ borderBottom: 1, borderColor: 'divider',bgcolor:'#2e1534' }}>
+                        <StyledTabs value={value} onChange={handleChange} aria-label="ant example">
+                        <StyledTab  label="Education" {...a11yProps(0)} />
+                        <StyledTab  label="Experiences" {...a11yProps(1)} />
+                        <StyledTab  label="Awards and Achievements" {...a11yProps(2)} />
+                        <StyledTab  label="Reviews" {...a11yProps(3)} />
+                        <StyledTab  label="Statistics" {...a11yProps(4)} />
+                        <StyledTab  label="Plans" {...a11yProps(5)} />
+                        <StyledTab  label="Exams" {...a11yProps(6)} />
+                        <StyledTab  label="Subjects" {...a11yProps(7)} />
+                        </StyledTabs>
+                </Box> }
+                <CustomTabPanel value={value} index={0}>
+                    <MentorEducation 
+                        mentor={mentor}
+                        onUpdate={(state) => {setMentor(state)}}
+                    />
+                </CustomTabPanel>
+
+                <CustomTabPanel value={value} index={1}>
+                    <MentorExperiences
+                        mentor={mentor}
+                        onUpdate={(state) => {setMentor(state)}}
+                    />
+                </CustomTabPanel>
+
+                <CustomTabPanel value={value} index={2}>
+                    <MentorAchievements 
+                        mentor={mentor}
+                        onUpdate={(state) => {setMentor(state)}}
+                    />
+                </CustomTabPanel>
+
+                <CustomTabPanel value={value} index={3}>
+                    <MentorStatistics 
+                        mentor={mentor}
+                        onUpdate={(state) => {setMentor(state)}}
+                    />
+                </CustomTabPanel>
+
+
+                <CustomTabPanel value={value} index={4}>
+                    <MentorReviews 
+                        mentor={mentor}
+                        onUpdate={(state) => {setMentor(state)}}
+                    />
+                </CustomTabPanel>
+
+                <CustomTabPanel value={value} index={5}>
+                    <MentorPlans 
+                        mentor={mentor}
+                        onUpdate={(state) => {setMentor(state)}}
+                    />
+                </CustomTabPanel>
+                
+                <CustomTabPanel value={value} index={6}>
+                
+               
+
+               {mentor.mentorExams.map((exam) => (
+                   <div key={exam}>
+                    {exam}
+                    </div>
+                                ))}
+              
+                </CustomTabPanel>
+
+
+                <CustomTabPanel value={value} index={7}>
+                
+               
+
+                {mentor.mentorExams.map((subject) => (
+                    <div key={subject}>
+                     {subject}
+                     </div>
+                      ))}
+               
+                 </CustomTabPanel>
+
+
+                <div
+            style={{
+              position: 'fixed',  // Set the position to fixed
+              top: '20px',  // Adjust the top position as needed
+              right: '1px',  // 
+                width: '17%',  // Set the width to 30% of the screen
+                height: '100vh',  // Set the height to 100% of the viewport height
+                float: 'right',  // Align the div to the right
+                backgroundColor: 'lightgray',  // Example background color
+                boxSizing: 'border-box',  // Include padding in the width calculation
+                
+            }}
+        >
+            <img
+                src="https://static.vecteezy.com/system/resources/previews/000/380/945/original/edit-profile-vector-icon.jpg" // Replace with the URL of your image
+                alt="Your Image"
+                style={{
+     
+                    width: '100%',  // Make the image occupy 100% of the container width
+                    height: '100%',  // Make the image occupy 100% of the container height
+                    objectFit: 'cover',  // Maintain aspect ratio and cover the container
+                }}
+            />
+        </div>
+                
+
+
       </div>
 
       {/* Dialog for Contact Details */}
