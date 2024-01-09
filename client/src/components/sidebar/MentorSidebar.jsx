@@ -69,7 +69,7 @@ export default function MentorSidebar() {
               </ListItemButton> 
               :
               index === 1 ?
-              <ListItemButton onClick={() => { if(location.pathname.includes('/mentor/yourstudents') === false) navigate('/mentor/yourstudents')}} >
+              <ListItemButton onClick={() => { if(location.pathname.includes('/mentor/plan/all/yourstudents') === false) navigate('/mentor/plan/all/yourstudents')}} >
                 <ListItemIcon style={{ color: '#00ecff' }} >
                    <PeopleIcon/>
                 </ListItemIcon>

@@ -20,6 +20,8 @@ import StudentForYou from './components/home/StudentForYou';
 import StudentPlans from './components/mentors/StudentPlans';
 import StudentChats from './components/mentors/StudentChats';
 import MentorChats from './components/mentors/MentorChats';
+import MentorPlansList from './components/mentors/MentorPlansList';
+import MentorStudents from './components/mentors/MentorStudents';
 
 function App() {
   return (
@@ -47,6 +49,8 @@ function App() {
               <Route  path = '/mentor/public' element = {<MentorPublicProfile/>}/>
               <Route  path = '/student/chats/:chatId' element = {<StudentChats/>}/>
               <Route  path = '/mentor/chats/:chatId' element = {<MentorChats/>}/>
+              <Route  path = '/mentor/yourplans' element = {<MentorPlansList/>}/>
+              <Route  path = '/mentor/plan/:planId/yourstudents' element = {<MentorStudents/>}/>
             </Routes>
           </div>
         </BrowserRouter>

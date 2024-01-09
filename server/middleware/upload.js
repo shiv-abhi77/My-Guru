@@ -10,7 +10,7 @@ const storage = new GridFsStorage({
     url: `mongodb+srv://${username}:${password}@movieverse-app.tpux4jp.mongodb.net/myGuru?retryWrites=true&w=majority`,
     file: (request, file) => {
       
-      const match = ["image/jpeg", "image/png", "image/jpg"];
+      const match = ["image/jpeg", "image/png", "image/jpg, video/mp4"];
       if (match.indexOf(file.mimetype) === -1) {
         return `${Date.now()}-post-${file.originalname}`;
       }

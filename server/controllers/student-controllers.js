@@ -414,9 +414,21 @@ export const getChatMessagesController = async(request, response) => {
     try {
         let result = []
         const options = { new: true };
+        let mentorName = ''
+        let studentName = ''
         let chat = await Chat.findOne({_id:request.query.chatId})
-        result = chat.messages
-        return response.status(200).json({data:result})
+        if(request.query.role === 'student'){
+            let mentor = await Mentor.findOne({mentorAccountId:chat.mentorAccountId})
+            mentorName = mentor.mentorName
+            result = chat.messages
+            return response.status(200).json({data:result, name:mentorName})
+        }else{
+            let student = await Student.findOne({studentAccountId:chat.studentAccountId})
+            studentName = student.studentName
+            result = chat.messages
+            return response.status(200).json({data:result, name:studentName})
+        }
+        
     } catch (error) {
         console.log(error.message)
         return response.status(500).json({msg:'failed fetching chat messages'})

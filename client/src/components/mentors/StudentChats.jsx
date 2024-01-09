@@ -6,8 +6,10 @@ import { getAccessToken } from "../../utils/util"
 import { TextField } from "@mui/material";
 import dayjs from "dayjs";
 import SendIcon from '@mui/icons-material/Send';
-import io from 'socket.io-client'
-
+import {socket} from '../../service/socket.js'
+import AttachmentIcon from '@mui/icons-material/Attachment';
+import FormLabel from '@mui/material/FormLabel';
+import FormControl from '@mui/material/FormControl';
 const StudentChats = () => {
     
     const navigate = useNavigate()
@@ -26,13 +28,9 @@ const StudentChats = () => {
     const [messages, setMessages] = useState([])
     const [newMessage, setNewMessage] = useState(newMessageInitial)
     const [imageFile, setImageFile] = useState(null)
-    const socket = io.connect('http://localhost:8000');
-    socket.on('connect', () => {
-        console.log('Successfully connected!');
-    });
-    socket.on('receive',msg=>{
-        setMessages([...messages, msg]);  
-    })
+    const [check, setCheck] = useState(false)
+    const [chattingWith, setChattingWith] = useState('')
+    
 
 
     const sendMessage = async() => {
@@ -53,12 +51,13 @@ const StudentChats = () => {
              const response = await fetchResponse.json();
             if(response.msg.includes('success')){
                 
-                messages.reverse()
-                messages.push(newMessage)
-                messages.reverse()
-                setMessages(messages);
+                // messages.reverse()
+                // messages.push(newMessage)
+                // messages.reverse()
+                socket.emit('send', {
+                    msg:newMessage,
+                })
                 setNewMessage(newMessageInitial)
-                socket.emit('send', newMessage)
                 
             }else{
 
@@ -71,11 +70,11 @@ const StudentChats = () => {
     }
 
 
-
+    
 
     useEffect(() => {
       const myFunction = async() => {
-        const url = `http://localhost:8000/getChatMessages?chatId=${chatId}`;
+        const url = `http://localhost:8000/getChatMessages?chatId=${chatId}&role=${account.role}`;
                 const settings = {
                 method: 'GET',
                 headers: {
@@ -87,9 +86,12 @@ const StudentChats = () => {
                     const fetchResponse = await fetch(url, settings);
                     const response = await fetchResponse.json();
                     console.log(response.data)
+                    
                     response.data.reverse()
                     setMessages(response.data);
-                    
+                    setChattingWith(response.name)
+                    setCheck(true)
+                    socket.emit('joinroom', chatId);
                     } catch (e) {
                     console.log(e);
                     }
@@ -97,6 +99,56 @@ const StudentChats = () => {
 
       myFunction()
     }, [])
+
+    useEffect(() => {
+        const storeImageAndGetLink = async() => {
+          
+          if(imageFile){
+              const data = new FormData();
+              data.append("name", imageFile.name);
+              data.append("file", imageFile);
+              
+              const settings = {
+                  method: "POST",
+                  body: data,
+                  headers: {
+                      'authorization' : getAccessToken()
+                  },
+                  
+                  }
+                  try {
+                      const fetchResponse = await fetch(`http://localhost:8000/uploadImageMessage?chatId=${chatId}&role=${account.role}&senderAccountId=${account.id}`, settings);
+                      const response = await fetchResponse.json();
+                      socket.emit('send', {
+                        msg:response.data
+                    })
+                    setNewMessage(newMessageInitial)
+                      
+                  } catch (e) {
+                      
+                      return e;
+                  }
+          }
+        }
+        storeImageAndGetLink();
+      }, [imageFile])
+
+    useEffect(() => {
+        socket.on('receive',(obj)=>{
+            console.log(obj)
+            let tempArray = messages
+            
+            tempArray.reverse();
+            tempArray.push(obj.msg);
+            tempArray.reverse();
+            
+            setMessages(tempArray);
+            })
+    
+      
+    }, [check])
+    
+
     
 
 
@@ -115,7 +167,12 @@ const StudentChats = () => {
                     height:'600px'
                     
                 }}>
-
+                <div style={{
+                    fontSize:'20px',
+                    color:'black'
+                }}>
+                    Chatting with mentor - {chattingWith}
+                </div>
                         <div style={{
                             display:'flex',
                             flexDirection:'column',
@@ -133,8 +190,54 @@ const StudentChats = () => {
                         {
                             messages && messages.length > 0 ? messages.map(e => (
                                 <>
-                                    {
+                                {
                                         account.role === e.senderRole ?
+                                        e.messageType === 'image'?
+                                        <div style={{
+                                            display: 'block',
+                                            width: '40%',
+                                            height: '250px',
+                                            cursor:'pointer',
+                                            marginBottom:'10px',
+                                            marginRight:'0px',
+                                            marginLeft:'auto',
+                                        }}
+                                        onClick={() => {
+                                            
+                                        }}
+                                        >
+                                            <img src={e.messageMediaLink && e.messageMediaLink !== ""?e.messageMediaLink:'https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png'}alt="Post Image" style={{
+                                            width:'100%',
+                                            display: 'block',     
+                                            width: '100%',
+                                            border:'1px solid rgb(213 213 213)',
+                                            borderRadius:'5px',
+                                            height: '100%',
+                                            outline: 'none' ,
+                                            }} />
+                                        </div>
+                                       :
+                                        e.messageType === 'video' ?
+                                        <div style={{
+                                            display: 'block',
+                                            width: '40%',
+                                            height: '250px',
+                                            cursor:'pointer',
+                                            marginBottom:'10px',
+                                            marginRight:'0px',
+                                            marginLeft:'auto',
+                                        }}
+                                        onClick={() => {
+                                            
+                                        }}
+                                        >
+                                        <video controls width="100%">
+                                            <source src={`${e.messageMediaLink}`} type="video/mp4" />
+                                            Sorry, your browser doesn't support videos.
+                                        </video>
+                                        </div>
+                                        :
+
                                         <div style={{
                                         marginBottom:'10px',
                                         marginRight:'0px',
@@ -148,7 +251,57 @@ const StudentChats = () => {
                                     }}>
                                     {e.messageBody}
                                     </div>
+
+
                                     :
+
+                                    e.messageType === 'image'?
+                                    <div style={{
+                                            display: 'block',
+                                            width: '40%',
+                                            height: '250px',
+                                            cursor:'pointer',
+                                            marginBottom:'10px',
+                                            marginRight:'auto',
+                                            marginLeft:'5px',
+                                        }}
+                                        onClick={() => {
+                                            
+                                        }}
+                                        >
+                                            <img src={e.messageMediaLink && e.messageMediaLink !== ""?e.messageMediaLink:'https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png'}alt="Post Image" style={{
+                                            width:'100%',
+                                            display: 'block',     
+                                            width: '100%',
+                                            border:'1px solid rgb(213 213 213)',
+                                            borderRadius:'5px',
+                                            height: '100%',
+                                            outline: 'none' ,
+                                            }} />
+                                        </div>
+                                        :
+                                        
+                                        e.messageType === 'video' ?
+                                        <div style={{
+                                            display: 'block',
+                                            width: '40%',
+                                            height: '250px',
+                                            cursor:'pointer',
+                                            marginBottom:'10px',
+                                            marginRight:'auto',
+                                            marginLeft:'5px',
+                                        }}
+                                        onClick={() => {
+                                            
+                                        }}
+                                        >
+                                        <video controls width="100%">
+                                            <source src={`${e.messageMediaLink}`} type="video/mp4" />
+                                            Sorry, your browser doesn't support videos.
+                                        </video>
+                                        </div>
+                                        :
+
                                     <div style={{
                                         marginBottom:'10px',
                                         marginRight:'auto',
@@ -175,6 +328,31 @@ const StudentChats = () => {
                 // marginTop:'auto',
                 // marginBottom:'20px'
             }}>
+
+            <FormControl>
+                    <label htmlFor="fileInput">
+                    <div style={{
+                    cursor:'pointer'
+                }}
+                >
+                    <AttachmentIcon style={{
+                        fontSize:'40px'
+                    }}/>
+                    </div>
+                            <input type="file"
+                                id="fileInput"
+                                
+                                style={{
+                                    display:'none'
+                                }}
+                                onChange={(e) => setImageFile(e.target.files[0])}
+                                >
+                                
+                            </input>
+                    </label>
+
+                </FormControl>
+                
                     <div style={{
                     flexBasis:'98%',
                     border:'1px solid #ebf0f5',
@@ -189,10 +367,11 @@ const StudentChats = () => {
                     onChange={(e) => {setNewMessage({...newMessage, [e.target.name]:e.target.value}); console.log(newMessage)}}
                     id="filled-multiline-flexible" 
                     variant="filled" 
-                    label="Multiline"
+                    label="Write a message..."
                     multiline
                     />
                 </div>
+                
                 <div style={{
                     flexBasis:'2%',
                     marginBottom:'0px',

@@ -7,6 +7,8 @@ import Student from '../model/student-schema.js';
 import Post from '../model/post-schema.js';
 import Comment from '../model/comment-schema.js';
 import Subscription from '../model/subscription-schema.js';
+import Chat from '../model/chat-schema.js';
+import moment from 'moment'
 export const getMentorProfileController = async(request, response) => {
     
     try{
@@ -269,6 +271,55 @@ export const deletePostController = async(request, response) => {
 
     }catch(error){
         return response.status(500).json('failed posts fetching');
+    }
+}
+
+export const getMentorPlansController = async(request, response) => {
+    try {
+        let result = []
+        let mentor = await Mentor.findOne({mentorAccountId:request.query.mentorAccountId})
+        result = mentor.mentorPlans
+        return response.status(200).json({data:result})
+    } catch (error) {
+        console.log(error.message);
+        return response.status(500).json({msg:'failed fetching mentor plans'})
+    }
+}
+
+export const getPlanStudentsController = async(request, response) => {
+    try {
+        let result = []
+        let studentIdList = []
+        let subscriptions = []
+        const options = { new: true };
+        if(request.query.planId === 'all'){
+             subscriptions = await Subscription.find({mentorAccountId:request.query.mentorAccountId, status:true})
+        }else{
+            subscriptions = await Subscription.find({mentorAccountId:request.query.mentorAccountId, planId:request.query.planId, status:true})
+        }
+            for(let i = 0;i<subscriptions.length;i++){
+                let timeDifference = moment(new Date(subscriptions[i].purchaseTimestamp)).from(new Date())
+                if(timeDifference.includes('month') || timeDifference.includes('year')){
+                    subscriptions[i].status = false
+                    await Subscription.findOneAndUpdate({_id:subscriptions[i]._id.toString()}, subscriptions[i], options)
+                }else{
+                    studentIdList.push(subscriptions[i].studentAccountId)
+                }
+            }
+            for(let i = 0; i<studentIdList.length;i++){
+                let student = await Student.findOne({studentAccountId:studentIdList[i]})
+                let chat = await Chat.findOne({mentorAccountId:request.query.mentorAccountId, studentAccountId:student.studentAccountId})
+                result.push({
+                    studentAccountId:student.studentAccountId,
+                    studentName:student.studentName,
+                    chatId:chat._id.toString()
+                })
+            }
+            return response.status(200).json({data:result})
+        }
+    catch (error) {
+        console.log(error.message)
+        return response.status(200).json({msg:'failed fetching students enrolled in plan'})
     }
 }
 

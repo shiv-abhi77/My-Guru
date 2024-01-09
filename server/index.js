@@ -28,14 +28,28 @@ const io = new Server(server, {
       methods: ['GET', 'POST'],
     },
   });
-  
-io.on('connection', (socket) => {
-    socket.on('send', (msg) => {
-      io.emit('receive', msg);
-    });
 
-    socket.on('disconnect', function() {
-        console.log('Client disconnected.');
-    });
-});
+  io.on('connection', (socket) => {
+    console.log('new socket')
+      socket.on('forceDisconnect', function() {
+        console.log(socket.id)
+          
+          socket.disconnect()
+          console.log('Client disconnected'+socket.id);
+      });
+  
+      socket.on("joinroom", (room) => {
+          socket.room = room
+          socket.join(room);
+          console.log("User Joined Room: " + room);
+          console.log('socket id is' + socket.id)
+          
+      });
+      socket.on('send', function(msg){
+        
+        console.log(msg)
+        io.to(socket.room).emit('receive', msg);
+      });
+     
+  });
 dbConnection(USERNAME, PASSWORD);

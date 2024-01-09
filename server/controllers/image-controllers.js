@@ -1,5 +1,6 @@
 import grid  from "gridfs-stream";
 import mongoose from "mongoose";
+import Chat from "../model/chat-schema.js";
 const url = 'http://localhost:8000'
 
 let gfs, gridfsBucket;
@@ -27,6 +28,37 @@ export const uploadImageController=(request , response)=>{
     return
 }
 }
+export const uploadChatImageController=async (request , response)=>{
+    try {
+        
+    if(!request.file){
+        return response.status(404).json({msg: "File Not Found"})
+    }
+
+    const imageUrl = `${url}/file/${request.file.filename}`;
+    const options = { new: true };
+        let chat = await Chat.findOne({_id:request.query.chatId})
+        if(chat){
+            let newMessage = {
+                senderRole:request.query.role,
+                senderAccountId:request.query.senderAccountId,
+                messageType:imageUrl.includes('image')?'image':'video',
+                messageMediaLink:imageUrl,
+                messageBody:'',
+                messageTimestamp:new Date(),
+                seenFlag:false
+            }
+            chat.messages.push(newMessage)
+            await Chat.findOneAndUpdate({_id:request.query.chatId}, chat, options )
+            return response.status(200).json({data:newMessage})
+        }
+   
+} catch (error) {
+    console.log(error)
+    return
+}
+}
+
 
 export const getImageController = async(request , response) => {
     try {
