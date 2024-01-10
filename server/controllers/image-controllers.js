@@ -42,12 +42,14 @@ export const uploadChatImageController=async (request , response)=>{
             let newMessage = {
                 senderRole:request.query.role,
                 senderAccountId:request.query.senderAccountId,
-                messageType:imageUrl.includes('image')?'image':'video',
+                messageType:imageUrl.toLowerCase().includes('mp4') === true?'video':'image',
                 messageMediaLink:imageUrl,
                 messageBody:'',
                 messageTimestamp:new Date(),
                 seenFlag:false
             }
+            // console.log('fdsfsdfdsfs')
+            // console.log(newMessage)
             chat.messages.push(newMessage)
             await Chat.findOneAndUpdate({_id:request.query.chatId}, chat, options )
             return response.status(200).json({data:newMessage})

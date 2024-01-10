@@ -31,6 +31,7 @@ import { useState, useEffect, useContext } from "react"
 
 
 import { DataContext } from "../../context/DataProvider"
+import StudentSidebar from '../sidebar/StudentSidebar.jsx';
 
 
 
@@ -196,7 +197,13 @@ return (
 
   
     <div style={{ display: 'flex', flexDirection: 'row' }}>
+    {
+      account.role === 'mentor' ?
       <MentorSidebar />
+      :
+      <StudentSidebar/>
+    }
+      
       <div style={{ display: 'flex', flexDirection: 'column', width: '100%', fontFamily: 'DM Sans' }}>
         {/* Cover Picture */}
         <div style={{ position: 'relative', height: '200px', background: '#2bedbc', marginBottom: '20px' }}>

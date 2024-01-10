@@ -173,7 +173,8 @@ const makePaymentApi = async(planId, studentAccountId, mentorAccountId) => {
         <>
             <div style={{
                 display:'flex',
-                flexDirection:'column'
+                flexDirection:'column',
+                width:'80%'
             }}>
                 {/* Start of add new top view */}
                 <div style={{

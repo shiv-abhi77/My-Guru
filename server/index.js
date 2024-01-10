@@ -47,7 +47,7 @@ const io = new Server(server, {
       });
       socket.on('send', function(msg){
         
-        console.log(msg)
+        console.log(msg.msg)
         io.to(socket.room).emit('receive', msg);
       });
      

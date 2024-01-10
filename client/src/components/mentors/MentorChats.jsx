@@ -29,7 +29,6 @@ const StudentChats = () => {
     const [messages, setMessages] = useState([])
     const [newMessage, setNewMessage] = useState(newMessageInitial)
     const [imageFile, setImageFile] = useState(null)
-    const [check, setCheck] = useState(false)
     const [chattingWith, setChattingWith] = useState('')
     
 
@@ -91,7 +90,6 @@ const StudentChats = () => {
                     response.data.reverse()
                     setMessages(response.data);
                     setChattingWith(response.name)
-                    setCheck(true)
                     socket.emit('joinroom', chatId);
                     } catch (e) {
                     console.log(e);
@@ -101,21 +99,18 @@ const StudentChats = () => {
       myFunction()
     }, [])
 
-    useEffect(() => {
-        socket.on('receive',(obj)=>{
-            console.log('fdsfds')
-            let tempArray = messages
-            
-            tempArray.reverse();
-            tempArray.push(obj.msg);
-            tempArray.reverse();
-            
-            setMessages(tempArray);
-            })
-    
-      
-    }, [check])
-    
+    socket.on('receive',(obj)=>{
+        console.log(messages.length)
+        let tempArray = []
+        for(let i = 0; i<messages.length;i++){
+            tempArray.push(messages[i])
+        }
+        
+        tempArray.reverse();
+        tempArray.push(obj.msg);
+        tempArray.reverse();
+        setMessages(tempArray);
+        })
     useEffect(() => {
         const storeImageAndGetLink = async() => {
           
@@ -138,7 +133,7 @@ const StudentChats = () => {
                       socket.emit('send', {
                         msg:response.data
                     })
-                    setNewMessage(newMessageInitial)
+                    
                       
                   } catch (e) {
                       
@@ -149,7 +144,7 @@ const StudentChats = () => {
         storeImageAndGetLink();
       }, [imageFile])
 
-    
+      
 
 
     return(
@@ -192,8 +187,9 @@ const StudentChats = () => {
                         {
                             messages && messages.length > 0 ? messages.map(e => (
                                 <>
-                                    {
+                                {
                                         account.role === e.senderRole ?
+                                        e.messageType === 'image' || e.messageType === 'video'?
                                         e.messageType === 'image'?
                                         <div style={{
                                             display: 'block',
@@ -219,7 +215,7 @@ const StudentChats = () => {
                                             }} />
                                         </div>
                                        :
-                                        e.messageType === 'video' ?
+                                       
                                         <div style={{
                                             display: 'block',
                                             width: '40%',
@@ -257,7 +253,8 @@ const StudentChats = () => {
 
                                     :
 
-                                    e.messageType === 'image'?
+                                    e.messageType === 'image' || e.messageType === 'video'?
+                                    e.messageType === 'image' ?
                                     <div style={{
                                             display: 'block',
                                             width: '40%',
@@ -283,7 +280,6 @@ const StudentChats = () => {
                                         </div>
                                         :
                                         
-                                        e.messageType === 'video' ?
                                         <div style={{
                                             display: 'block',
                                             width: '40%',

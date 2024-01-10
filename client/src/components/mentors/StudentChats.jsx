@@ -30,9 +30,6 @@ const StudentChats = () => {
     const [imageFile, setImageFile] = useState(null)
     const [check, setCheck] = useState(false)
     const [chattingWith, setChattingWith] = useState('')
-    
-
-
     const sendMessage = async() => {
         newMessage.messageTimestamp = dayjs(new Date()).$d
         const settings = {
@@ -48,16 +45,14 @@ const StudentChats = () => {
          try {
              console.log(settings.body)
              const fetchResponse = await fetch(`http://localhost:8000/updateChatMessages?chatId=${chatId}`, settings);
+             setNewMessage(newMessageInitial)
              const response = await fetchResponse.json();
+             
             if(response.msg.includes('success')){
-                
-                // messages.reverse()
-                // messages.push(newMessage)
-                // messages.reverse()
                 socket.emit('send', {
                     msg:newMessage,
                 })
-                setNewMessage(newMessageInitial)
+                
                 
             }else{
 
@@ -90,7 +85,6 @@ const StudentChats = () => {
                     response.data.reverse()
                     setMessages(response.data);
                     setChattingWith(response.name)
-                    setCheck(true)
                     socket.emit('joinroom', chatId);
                     } catch (e) {
                     console.log(e);
@@ -99,6 +93,18 @@ const StudentChats = () => {
 
       myFunction()
     }, [])
+    socket.on('receive',(obj)=>{
+        console.log(messages.length)
+        let tempArray = []
+        for(let i = 0; i<messages.length;i++){
+            tempArray.push(messages[i])
+        }
+        
+        tempArray.reverse();
+        tempArray.push(obj.msg);
+        tempArray.reverse();
+        setMessages(tempArray);
+        })
 
     useEffect(() => {
         const storeImageAndGetLink = async() => {
@@ -122,7 +128,7 @@ const StudentChats = () => {
                       socket.emit('send', {
                         msg:response.data
                     })
-                    setNewMessage(newMessageInitial)
+                    
                       
                   } catch (e) {
                       
@@ -133,20 +139,7 @@ const StudentChats = () => {
         storeImageAndGetLink();
       }, [imageFile])
 
-    useEffect(() => {
-        socket.on('receive',(obj)=>{
-            console.log(obj)
-            let tempArray = messages
-            
-            tempArray.reverse();
-            tempArray.push(obj.msg);
-            tempArray.reverse();
-            
-            setMessages(tempArray);
-            })
     
-      
-    }, [check])
     
 
     
@@ -192,6 +185,7 @@ const StudentChats = () => {
                                 <>
                                 {
                                         account.role === e.senderRole ?
+                                        e.messageType === 'image' || e.messageType === 'video'?
                                         e.messageType === 'image'?
                                         <div style={{
                                             display: 'block',
@@ -217,7 +211,7 @@ const StudentChats = () => {
                                             }} />
                                         </div>
                                        :
-                                        e.messageType === 'video' ?
+                                       
                                         <div style={{
                                             display: 'block',
                                             width: '40%',
@@ -255,7 +249,8 @@ const StudentChats = () => {
 
                                     :
 
-                                    e.messageType === 'image'?
+                                    e.messageType === 'image' || e.messageType === 'video'?
+                                    e.messageType === 'image' ?
                                     <div style={{
                                             display: 'block',
                                             width: '40%',
@@ -281,7 +276,6 @@ const StudentChats = () => {
                                         </div>
                                         :
                                         
-                                        e.messageType === 'video' ?
                                         <div style={{
                                             display: 'block',
                                             width: '40%',
