@@ -198,6 +198,19 @@ export const getCommentsController = async(request, response) => {
                         userAccountId:user.mentorAccountId
                     });
                 }
+                else{
+                    user = await Student.findOne({studentAccountId:temp2.commentAccountId});
+                    if(user){
+                        objArrayOfComments.push({
+                            comment:temp2,
+                            userName:user.studentName,
+                            userTagline:'',
+                            userImage:user.mentorImage,
+                            userAccountId:user.studentAccountId
+                        });
+                    }
+                }
+                
             }
             
         }
@@ -215,14 +228,27 @@ export const getLikesController = async(request, response) => {
         let temp = request.query.postLikes.split(",")
         console.log(temp)
         for(let i = 0; i<temp.length;i++){
-                let user = await Mentor.findOne({mentorAccountId:temp[i]});
-                if(user){
+            let user = {}
+                 user = await Mentor.findOne({mentorAccountId:temp[i]});
+                 if(user){
                     objArrayOfLikes.push({
                         userName:user.mentorName,
                         userTagline:user.mentorTagline,
                         userImage:user.mentorImage
                     });
+                 }
+                else{
+                    user = await Student.findOne({studentAccountId:temp[i]})
+                    if(user){
+                        objArrayOfLikes.push({
+                            userName:user.studentName,
+                            userTagline:'',
+                            userImage:''
+                        });
+                    }
+                    
                 }
+                
         }
         return response.status(200).json({objArrayOfLikes});
 

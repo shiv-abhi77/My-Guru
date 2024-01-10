@@ -229,7 +229,7 @@ const StudentChats = () => {
                                             
                                         }}
                                         >
-                                        <video controls width="100%">
+                                        <video controls height='100%' width="100%">
                                             <source src={`${e.messageMediaLink}`} type="video/mp4" />
                                             Sorry, your browser doesn't support videos.
                                         </video>
@@ -293,7 +293,7 @@ const StudentChats = () => {
                                             
                                         }}
                                         >
-                                        <video controls width="100%">
+                                        <video controls height='100%' width="100%">
                                             <source src={`${e.messageMediaLink}`} type="video/mp4" />
                                             Sorry, your browser doesn't support videos.
                                         </video>

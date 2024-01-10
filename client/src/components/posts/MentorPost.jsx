@@ -151,7 +151,7 @@ const handleDeleteSubject = (exam) => {
         }
         try {
             console.log(settings.body)
-            const fetchResponse = await fetch(`http://localhost:8000/addComment?postId=${postId}`, settings);
+            const fetchResponse = await fetch(`http://localhost:8000/addComment?postId=${postId}&role=${account.role}`, settings);
             const response = await fetchResponse.json();
             setPost({...postState, postComments:[...postState.postComments, response]})
             getCommentsApiSecond(response)
@@ -228,7 +228,7 @@ const addLikeApi = async(postId)=> {
         }
         try {
             console.log(settings.body)
-            const fetchResponse = await fetch(`http://localhost:8000/addLike?postId=${postId}&likeUserId=${account.id}`, settings);
+            const fetchResponse = await fetch(`http://localhost:8000/addLike?postId=${postId}&likeUserId=${account.id}&role=${account.role}`, settings);
             const response = await fetchResponse.json();
             setPost({...postState, postLikes:[...postState.postLikes, account.id]})
             
@@ -248,7 +248,7 @@ const removeLikeApi = async(postId)=> {
         }
         try {
             console.log(settings.body)
-            const fetchResponse = await fetch(`http://localhost:8000/removeLike?postId=${postId}&likeUserId=${account.id}`, settings);
+            const fetchResponse = await fetch(`http://localhost:8000/removeLike?postId=${postId}&likeUserId=${account.id}&role=${account.role}`, settings);
             const response = await fetchResponse.json();
             setPost({...postState, postLikes:postState.postLikes.filter((e) => {
                 if(e !== account.id) return e
