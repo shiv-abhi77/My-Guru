@@ -104,7 +104,7 @@ const StudentMentors = () => {
                                         height:'fit-content',
                                         cursor:'pointer',
                                     }}
-                                    onClick={() => {}}
+                                    onClick={() => {navigate(`/student/video_call/${e.chatId}`)}}
                                     >
                             Video Call
                             </div>

@@ -1,7 +1,10 @@
 import MentorSidebar from "../sidebar/MentorSidebar"
 
 
+
 const CreatePost = () => {
+
+    
     return(
         <>
             <div style={{
@@ -10,7 +13,7 @@ const CreatePost = () => {
             
           }}>
                 <MentorSidebar/>
-            
+         
             </div>
         </>
     )

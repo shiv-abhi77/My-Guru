@@ -23,6 +23,11 @@ import MentorChats from './components/mentors/MentorChats';
 import MentorPlansList from './components/mentors/MentorPlansList';
 import MentorStudents from './components/mentors/MentorStudents';
 
+import RoomPage from './components/video_call/Room/mentor_call';
+import RoomPage2 from './components/video_call/Room/student_call';
+
+
+
 function App() {
   return (
     
@@ -51,6 +56,8 @@ function App() {
               <Route  path = '/mentor/chats/:chatId' element = {<MentorChats/>}/>
               <Route  path = '/mentor/yourplans' element = {<MentorPlansList/>}/>
               <Route  path = '/mentor/plan/:planId/yourstudents' element = {<MentorStudents/>}/>
+              <Route path='/mentor/video_call/:roomId' element = {<RoomPage/>} />
+              <Route path='/student/video_call/:roomId' element = {<RoomPage2/>} />
             </Routes>
           </div>
         </BrowserRouter>
