@@ -117,7 +117,7 @@ const MentorStudents = () => {
                     background:"#dad4f0"
                 }}>
                 {e.studentName}
-
+                {console.log(e)}
                 </div>
 
                 
@@ -161,7 +161,7 @@ const MentorStudents = () => {
                                         height:'fit-content',
                                         cursor:'pointer',
                                     }}
-                                    onClick={() => {}}
+                                    onClick={() => {navigate(`/mentor/video_call/${e.chatId}`)}}
                                     >
                             Video Call
                             </div>
