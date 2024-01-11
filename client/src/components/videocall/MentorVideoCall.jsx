@@ -2,14 +2,15 @@ import React from 'react' ;
 import {useParams} from 'react-router-dom';
 import {ZegoUIKitPrebuilt} from '@zegocloud/zego-uikit-prebuilt';
 import { useState ,useEffect , useContext } from "react";
-import { getAccessToken } from "../../../utils/util";
-import { DataContext } from "../../../context/DataProvider";
+import { getAccessToken } from "../../utils/util";
+import { DataContext } from "../../context/DataProvider";
+import MentorSidebar from '../sidebar/MentorSidebar';
 
 
-const RoomPage = () => {
-
+const MentorVideoCall = () => {
+   
    const {account}=useContext(DataContext);
-   const [studentName, setStudentName] = useState("");
+   const [mentorName, setMentorName] = useState("");
 
   
 
@@ -18,7 +19,7 @@ const RoomPage = () => {
       
 
       const myFunction = async() => {
-          const url = `http://localhost:8000/getStudentProfile?studentAccountId=${account.id}`;
+          const url = `http://localhost:8000/getMentorName?mentorAccountId=${account.id}`;
           const settings = {
           method: 'GET',
           headers: {
@@ -30,9 +31,9 @@ const RoomPage = () => {
               const fetchResponse = await fetch(url, settings);
               const response = await fetchResponse.json();
               console.log(response);
-              console.log(response.studentName);
-              setStudentName(response.studentName);
-              console.log(studentName);
+              console.log(response.mentorName);
+              setMentorName(response.mentorName);
+              console.log(mentorName);
        
 
 
@@ -70,7 +71,7 @@ const RoomPage = () => {
         serverSecret,
         roomId,
         Date.now().toString(),
-        studentName,
+         mentorName,
         ) ;
 
 
@@ -94,6 +95,22 @@ const RoomPage = () => {
        
       <>
       <div className='room-page'>
+      <div style={{
+            display:'flex',
+            flexDirection:'row',
+            
+          }}>
+                <MentorSidebar/>
+                <div style={{
+                width:'100%',
+                display:'flex',
+                justifyContent:'center',
+                
+                }}>
+
+
+                </div>
+            </div>
         <div ref={myMeeting}/>
         </div>
     </>
@@ -112,7 +129,7 @@ const RoomPage = () => {
 }
 
 
-export default RoomPage
+export default MentorVideoCall
 
 
 
