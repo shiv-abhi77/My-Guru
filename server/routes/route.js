@@ -41,5 +41,4 @@ Router.get('/getChatMessages', authenticateToken, getChatMessagesController)
 Router.post('/updateChatMessages', authenticateToken, updateChatMessagesController)
 Router.get('/getMentorPlans', authenticateToken, getMentorPlansController)
 Router.get('/getPlanStudents', authenticateToken, getPlanStudentsController)
-Router.get('/getMentorName', authenticateToken, getMentorProfileController)
 export default Router
