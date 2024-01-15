@@ -27,3 +27,8 @@ Web based platform connecting students with subject and exam experts for persona
 - SocketIO npm package for real time chat
 - MongoDB Atlas as database
 - NodeJS Express for server
+
+#### Sample account credentials
+##### Student - Username ('aa') Password ('aa')
+##### Mentor1 - Username('mm') Password('mm')
+##### Mentor2 - Username('nn') Password('nn')
