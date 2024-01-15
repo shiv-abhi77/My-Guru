@@ -12,13 +12,18 @@ app.use('/payment/post/update', express.raw({ type: 'application/json' }));
 app.use(bodyParser.json({extended:true}))
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(cors());
-app.use('/',Router);
+app.use(cors({
+  origin: 'http://localhost:3000',
+      methods: ['GET', 'POST'],
+}));
+app.get('/', (req, res) => {
+  res.send('hellp')
+})
 
 
 
 
-
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 const USERNAME = process.env.DB_USERNAME;
 const PASSWORD = process.env.DB_PASSWORD;
 const server = app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
