@@ -12,13 +12,7 @@ app.use('/payment/post/update', express.raw({ type: 'application/json' }));
 app.use(bodyParser.json({extended:true}))
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(cors());
-app.use(cors({
-  origin: 'http://localhost:3000',
-      methods: ['GET', 'POST'],
-}));
-app.get('/', (req, res) => {
-  res.send('hellp')
-})
+app.use('/',Router);
 
 
 
