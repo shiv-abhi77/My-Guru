@@ -26,7 +26,7 @@ import MentorPlans from "./MentorPlans.jsx"
 import { styled } from '@mui/material/styles';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import Image from "@mui/icons-material/Image.js"
-
+import '../../css/mentorProfile.css'
 const gradientBackgroundStyle = {
   position: 'fixed',
   top: 0,

@@ -25,6 +25,7 @@ import dayjs from 'dayjs';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useContext } from 'react';
 import { useLocation } from 'react-router-dom';
+import '../../css/profileEducation.css'
 const MentorEducation = ({mentor, onUpdate}) =>{
     const location  = useLocation();
     const {account}=useContext(DataContext);
@@ -140,21 +141,8 @@ const deleteEducationApi = () => {
                 flexDirection:'column'
             }}>
                 {/* Start of add new top view */}
-                <div style={{
-                    display:'flex',
-                    flexDirection:'row',
-                    fontSize:'16px',
-                    marginTop:'15px',
-                    fontFamily:'DM Sans',
-                    
-                }}>
-                <div style={{
-                    display:'flex',
-                    flexDirection:'column',
-                    fontSize:'16px',
-                    fontWeight: 700,
-                    fontFamily:'DM Sans'
-                }}>
+                <div className='top-bar'>
+                <div className='sub-top-bar'>
                 <div>
                 Add Education Details
                 </div>
@@ -170,15 +158,7 @@ const deleteEducationApi = () => {
                     location.pathname.includes('public') === true || account.id !== mentor.mentorAccountId?
                     <div></div>
                 :
-                    <div onClick={handleClickOpen} style={{
-                    marginLeft:'auto',
-                    marginRight:'0px',
-                    borderRadius:'5px',
-                    cursor:'pointer',
-                    border: '1px solid #142683',
-                    padding: '4px',
-                    color:'#142683'
-                }}>
+                    <div onClick={handleClickOpen} className='add-btn'>
                 <AddCircleOutlineIcon/> Add New
                 </div>
                     }
@@ -189,12 +169,7 @@ const deleteEducationApi = () => {
                 <Dialog open={open} onClose={handleClose}>
                     <DialogTitle>Add New School</DialogTitle>
                     <DialogContent>
-                    <div style={{
-                        display:'flex',
-                        justifyContent:'center',
-                        flexDirection:'column',
-                        marginTop:'10px',
-                        fontSize:'15px'}}>
+                    <div className='dialog-box'>
 
                         {/* Start of school name */}
                     <div style={{
@@ -350,13 +325,7 @@ const deleteEducationApi = () => {
                             flexDirection:'column',
                             fontFamily:'DM Sans'
                         }}>
-                        <div style={{
-                            display:'flex',
-                            flexDirection:'row',
-                            border:'1px solid #ebf0f5',
-                            padding: '30px 30px 30px 45px',
-                            marginTop:'10px'
-                        }}>
+                        <div className='education-box'>
 
                         <div style={{
                             display:'flex',
@@ -391,17 +360,7 @@ const deleteEducationApi = () => {
                             location.pathname.includes('public') === true || account.id !== mentor.mentorAccountId?
                     <div></div>
                 :
-                            <div style={{
-                            marginLeft:'auto',
-                            marginRight:'0px',
-                            borderRadius:'5px',
-                            border: '1px solid #142683',
-                            
-                            padding: '4px 4px 4px 4px',
-                            color:'#142683',
-                            height:'fit-content',
-                            cursor:'pointer',
-                        }}
+                            <div className='edit-btn'
                         onClick={() => {
                             
                             handleClickOpen2(education);
@@ -414,12 +373,7 @@ const deleteEducationApi = () => {
                             <Dialog open={open2} onClose={handleClose2}>
                     <DialogTitle>Edit education</DialogTitle>
                     <DialogContent>
-                    <div style={{
-                        display:'flex',
-                        justifyContent:'center',
-                        flexDirection:'column',
-                        marginTop:'10px',
-                        fontSize:'15px'}}>
+                    <div className='dialog-box'>
 
                         {/* Start of school name */}
                     <div style={{

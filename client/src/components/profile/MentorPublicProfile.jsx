@@ -32,7 +32,7 @@ import { useState, useEffect, useContext } from "react"
 
 import { DataContext } from "../../context/DataProvider"
 import StudentSidebar from '../sidebar/StudentSidebar.jsx';
-
+import '../../css/mentorPublicProfile.css'
 
 
 function CustomTabPanel(props) {

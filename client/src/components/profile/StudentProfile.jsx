@@ -9,7 +9,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { getAccessToken } from "../../utils/util.js"
 import FormControl from '@mui/material/FormControl';
 import NativeSelect from '@mui/material/NativeSelect';
-
+import '../../css/studentProfile.css'
 
 const StudentProfile = () => {
     const {account}=useContext(DataContext);

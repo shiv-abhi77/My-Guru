@@ -416,8 +416,8 @@ const deletePost = async(postId) => {
                     <img src={mentorImage && mentorImage !== ""?mentorImage:'https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png'}alt="Mentor Image" className='image' />
                 </div>
 
-                <div className='details-container'>
-                    <div className='name'>
+                <div className='details-box'>
+                    <div className='box-name'>
                         {mentorName}
                     </div>
                     <div style={{

@@ -28,6 +28,7 @@ import subjects from '../../constants/subjects.js';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import monthMap from '../../constants/monthMap.js';
+import '../../css/profileAchievements.css'
 const MentorAchievements = ({mentor, onUpdate}) =>{
     const location  = useLocation();
     const {account}=useContext(DataContext);
@@ -148,21 +149,8 @@ const deleteProjectApi = () => {
                 flexDirection:'column'
             }}>
                 {/* Start of add new top view */}
-                <div style={{
-                    display:'flex',
-                    flexDirection:'row',
-                    fontSize:'16px',
-                    marginTop:'15px',
-                    fontFamily:'DM Sans',
-                    
-                }}>
-                <div style={{
-                    display:'flex',
-                    flexDirection:'column',
-                    fontSize:'16px',
-                    fontWeight: 700,
-                    fontFamily:'DM Sans'
-                }}>
+                <div className='top'>
+                <div className='sub-top'>
                 <div>
                 Add Achievements
                 </div>
@@ -178,15 +166,7 @@ const deleteProjectApi = () => {
                     location.pathname.includes('public') === true || account.id !== mentor.mentorAccountId?
                     <div></div>
                 :
-                <div onClick={handleClickOpen} style={{
-                    marginLeft:'auto',
-                    marginRight:'0px',
-                    borderRadius:'5px',
-                    cursor:'pointer',
-                    border: '1px solid #142683',
-                    padding: '4px',
-                    color:'#142683'
-                }}>
+                <div onClick={handleClickOpen} className='btn'>
                 <AddCircleOutlineIcon/> Add New
                 </div>
                 }
@@ -197,12 +177,7 @@ const deleteProjectApi = () => {
                 <Dialog open={open} onClose={handleClose}>
                     <DialogTitle>Add New Achievements</DialogTitle>
                     <DialogContent>
-                    <div style={{
-                        display:'flex',
-                        justifyContent:'center',
-                        flexDirection:'column',
-                        marginTop:'10px',
-                        fontSize:'15px'}}>
+                    <div className='dialog-box'>
 
                         {/* Start of school name */}
                     <div style={{
@@ -265,13 +240,7 @@ const deleteProjectApi = () => {
                     mentor.achievements &&  mentor.achievements.length > 0 ? mentor.achievements.map((achievement) => (
                         
                         
-                        <div style={{
-                            display:'flex',
-                            flexDirection:'column',
-                            border:'1px solid #ebf0f5',
-                            padding: '30px 30px 30px 45px',
-                            marginTop:'10px'
-                        }}>
+                        <div className='achievement-box'>
                         <div style={{
                             display:'flex',
                             flexDirection:'row',
@@ -289,17 +258,7 @@ const deleteProjectApi = () => {
                                 location.pathname.includes('public') === true || account.id !== mentor.mentorAccountId?
                     <div></div>
                 :
-                                <div style={{
-                            marginLeft:'auto',
-                            marginRight:'0px',
-                            borderRadius:'5px',
-                            border: '1px solid #142683',
-                            
-                            padding: '1px 1px 1px 1px',
-                            color:'#142683',
-                            height:'fit-content',
-                            cursor:'pointer',
-                        }}
+                                <div className='edit-btn'
                         onClick={() => {
                             
                             handleClickOpen2(achievement);
@@ -317,12 +276,7 @@ const deleteProjectApi = () => {
                         <Dialog open={open2} onClose={handleClose2}>
                     <DialogTitle>Add New Achievements</DialogTitle>
                     <DialogContent>
-                    <div style={{
-                        display:'flex',
-                        justifyContent:'center',
-                        flexDirection:'column',
-                        marginTop:'10px',
-                        fontSize:'15px'}}>
+                    <div className='dialog-box'>
 
                         {/* Start of school name */}
                     <div style={{

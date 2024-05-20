@@ -28,7 +28,7 @@ import subjects from '../../constants/subjects.js';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import monthMap from '../../constants/monthMap.js';
-
+import '../../css/profilePlans.css'
 const MentorPlans = ({mentor, onUpdate}) =>{
     const location  = useLocation();
     const {account}=useContext(DataContext);
@@ -177,21 +177,8 @@ const makePaymentApi = async(planId, studentAccountId, mentorAccountId) => {
                 width:'80%'
             }}>
                 {/* Start of add new top view */}
-                <div style={{
-                    display:'flex',
-                    flexDirection:'row',
-                    fontSize:'16px',
-                    marginTop:'15px',
-                    fontFamily:'DM Sans',
-                    
-                }}>
-                <div style={{
-                    display:'flex',
-                    flexDirection:'column',
-                    fontSize:'16px',
-                    fontWeight: 700,
-                    fontFamily:'DM Sans'
-                }}>
+                <div className='plans-box'>
+                <div className='plans-sub-box'>
                 <div>
                 Add Plans
                 </div>
@@ -207,15 +194,7 @@ const makePaymentApi = async(planId, studentAccountId, mentorAccountId) => {
                     location.pathname.includes('public') === true || account.id !== mentor.mentorAccountId?
                     <div></div>
                 :
-                    <div onClick={handleClickOpen} style={{
-                    marginLeft:'auto',
-                    marginRight:'0px',
-                    borderRadius:'5px',
-                    cursor:'pointer',
-                    border: '1px solid #142683',
-                    padding: '4px',
-                    color:'#142683'
-                }}>
+                    <div onClick={handleClickOpen} className='add-btn'>
                 <AddCircleOutlineIcon/> Add New
                 </div>
                 }
@@ -226,12 +205,7 @@ const makePaymentApi = async(planId, studentAccountId, mentorAccountId) => {
                 <Dialog open={open} onClose={handleClose}>
                     <DialogTitle>Add New Plans</DialogTitle>
                     <DialogContent>
-                    <div style={{
-                        display:'flex',
-                        justifyContent:'center',
-                        flexDirection:'column',
-                        marginTop:'10px',
-                        fontSize:'15px'}}>
+                    <div className='dialog-box'>
 
                         {/* Start of school name */}
                     <div style={{
@@ -402,13 +376,7 @@ const makePaymentApi = async(planId, studentAccountId, mentorAccountId) => {
                     mentor.mentorPlans &&  mentor.mentorPlans.length > 0 ? mentor.mentorPlans.map((plan) => (
                         
                         
-                        <div style={{
-                            display:'flex',
-                            flexDirection:'column',
-                            border:'1px solid #ebf0f5',
-                            padding: '30px 30px 30px 45px',
-                            marginTop:'10px'
-                        }}>
+                        <div className='plan'>
                         <div style={{
                             display:'flex',
                             flexDirection:'row',
@@ -428,39 +396,18 @@ const makePaymentApi = async(planId, studentAccountId, mentorAccountId) => {
                             {`No. of video calls: ${plan.videoCalls}`}
                             </div>
 
-                            <div style={{
-                                color:'black',
-                                fontSize:'18px',
-                                width:750,
-                                marginTop:'2px',
-
-                            }}>
+                            <div className='streams'>
                             {`No. of streams: ${plan.streams}`}
                             </div>
 
-                            <div style={{
-                                color:'black',
-                                fontSize:'18px',
-                                width:750,
-                                marginTop:'2px',
-                            }}>
+                            <div className='posts'>
                             {`No. of posts/articles: ${plan.posts}`}
                             </div>
 
-                            <div style={{
-                                color:'black',
-                                fontSize:'18px',
-                                width:750,
-                                marginTop:'2px',
-                            }}>
+                            <div className='other-perks'>
                             {`Other perks: ${plan.otherPerks}`}
                             </div>
-                            <div style={{
-                                color:'black',
-                                fontSize:'18px',
-                                width:750,
-                                marginTop:'2px',
-                            }}>
+                            <div className='price'>
                             {`Price of plan(in Rs per month): ${plan.price}`}
                             </div>
 
@@ -469,19 +416,7 @@ const makePaymentApi = async(planId, studentAccountId, mentorAccountId) => {
 
                             {
                                 location.pathname.includes('public') === true || account.id !== mentor.mentorAccountId?
-                                <div style={{
-                            marginLeft:'auto',
-                            marginRight:'0px',
-                            borderRadius:'5px',
-                            border: '1px solid #142683',
-                            background:'green',
-                            padding: '10px 10px 10px 10px',
-                            color:'white',
-                            fontSize:'16px',
-                            fontWeight:'700',
-                            height:'fit-content',
-                            cursor:'pointer',
-                        }}
+                                <div className='payment-btn'
                         onClick={() => {
                             makePaymentApi(plan._id, account.id, mentor.mentorAccountId)
                             
@@ -490,19 +425,8 @@ const makePaymentApi = async(planId, studentAccountId, mentorAccountId) => {
                             Buy Plan
                             </div>
                 :
-                                <div style={{
-                            marginLeft:'auto',
-                            marginRight:'0px',
-                            borderRadius:'5px',
-                            border: '1px solid #142683',
-                            
-                            padding: '1px 1px 1px 1px',
-                            color:'#142683',
-                            height:'fit-content',
-                            cursor:'pointer',
-                        }}
+                                <div className='edit-btn'
                         onClick={() => {
-                            
                             handleClickOpen2(plan);
                         }}
                         >
@@ -517,12 +441,7 @@ const makePaymentApi = async(planId, studentAccountId, mentorAccountId) => {
                         <Dialog open={open2} onClose={handleClose2}>
                     <DialogTitle>Add New Plans</DialogTitle>
                     <DialogContent>
-                    <div style={{
-                        display:'flex',
-                        justifyContent:'center',
-                        flexDirection:'column',
-                        marginTop:'10px',
-                        fontSize:'15px'}}>
+                    <div className='dialog-box'>
 
                         {/* Start of school name */}
                     <div style={{

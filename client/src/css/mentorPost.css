@@ -28,14 +28,14 @@ border-radius: 60px;
 object-fit: cover;
 
 }
-.details-container{
+.details-box{
     display: flex;
 flex-direction: column;
 margin-top: 6px;
 margin-left: 10px;
 
 }
-.name{
+.box-name{
     font-family: 'DM Sans';
 font-size: 14px;
 font-weight: 700;
