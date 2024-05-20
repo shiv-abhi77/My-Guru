@@ -3,7 +3,7 @@ import { useNavigate, useParams, Link, useLocation } from "react-router-dom"
 import MentorSidebar from "../sidebar/MentorSidebar"
 import { DataContext } from "../../context/DataProvider"
 import { getAccessToken } from "../../utils/util"
-
+import '../../css/mentorPlansList.css'
 
 
 const MentorPlansList = () => {
@@ -70,13 +70,7 @@ const MentorPlansList = () => {
                     plans &&  plans.length > 0 ? plans.map((plan) => (
                         
                         
-                        <div style={{
-                            display:'flex',
-                            flexDirection:'column',
-                            border:'3px solid rgb(195 195 195)',
-                            padding: '30px 30px 30px 45px',
-                            marginTop:'10px'
-                        }}>
+                        <div className="plan-container">
                         <div style={{
                             display:'flex',
                             flexDirection:'row',
@@ -96,39 +90,18 @@ const MentorPlansList = () => {
                             {`No. of video calls: ${plan.videoCalls}`}
                             </div>
 
-                            <div style={{
-                                color:'black',
-                                fontSize:'18px',
-                                width:750,
-                                marginTop:'2px',
-
-                            }}>
+                            <div className="streams">
                             {`No. of streams: ${plan.streams}`}
                             </div>
 
-                            <div style={{
-                                color:'black',
-                                fontSize:'18px',
-                                width:750,
-                                marginTop:'2px',
-                            }}>
+                            <div className="posts">
                             {`No. of posts/articles: ${plan.posts}`}
                             </div>
 
-                            <div style={{
-                                color:'black',
-                                fontSize:'18px',
-                                width:750,
-                                marginTop:'2px',
-                            }}>
+                            <div className="other-perks">
                             {`Other perks: ${plan.otherPerks}`}
                             </div>
-                            <div style={{
-                                color:'black',
-                                fontSize:'18px',
-                                width:750,
-                                marginTop:'2px',
-                            }}>
+                            <div className="price">
                             {`Price of plan(in Rs per month): ${plan.price}`}
                             </div>
                             
@@ -136,19 +109,7 @@ const MentorPlansList = () => {
 
                         </div>
                             
-                        <div style={{
-                            marginLeft:'auto',
-                            marginRight:'0px',
-                            borderRadius:'5px',
-                            border: '1px solid #142683',
-                            background:'green',
-                            padding: '10px 10px 10px 10px',
-                            color:'white',
-                            fontSize:'16px',
-                            fontWeight:'700',
-                            height:'fit-content',
-                            cursor:'pointer',
-                        }}
+                        <div className="view-btn"
                         onClick={() => {navigate(`/mentor/plan/${plan._id}/yourstudents`)}}
                         >
                             View students enrolled

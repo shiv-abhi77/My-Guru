@@ -32,6 +32,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import subjects from "../../constants/subjects";
 import exams from "../../constants/exams";
 import CloseIcon from '@mui/icons-material/Close';
+import '../../css/mentorHome.css'
 const MentorHome = () =>{
     const {account}=useContext(DataContext);
     const {setAccount} = useContext(DataContext);
@@ -172,12 +173,7 @@ const handleDeleteSubject = (exam) => {
             
           }}>
                 <MentorSidebar/>
-                <div style={{
-                width:'100%',
-                display:'flex',
-                justifyContent:'center',
-                fontFamily:'DM Sans'
-                }}>     
+                <div className="parent-container">     
 
                 <div style={{
                 display:'flex',
@@ -210,12 +206,7 @@ const handleDeleteSubject = (exam) => {
                 <Dialog open={open} onClose={handleClose}>
                     <DialogTitle>Start new post</DialogTitle>
                     <DialogContent>
-                    <div style={{
-                        display:'flex',
-                        justifyContent:'center',
-                        flexDirection:'column',
-                        marginTop:'10px',
-                        fontSize:'15px'}}>
+                    <div className="dialog-container">
 
                         {/* Start of school name */}
 
@@ -276,13 +267,7 @@ const handleDeleteSubject = (exam) => {
                     </NativeSelect>
 
                 </FormControl>
-                <div style={{
-                    display:'flex',
-                    flexDirection:'row',
-                    maxHeight:'100px',
-                    overflowY:'auto',
-                    flexWrap:'wrap'
-                }}>
+                <div className="exams-container">
 
                         
 
@@ -292,16 +277,7 @@ const handleDeleteSubject = (exam) => {
                    postState.postExams.map((exam) =>
                         (
                         <div>
-                        <div  style={{
-                        background:'#27538b',
-                        color:'white',
-                        marginTop:'1px',
-                        borderRadius:'20px',
-                        width:'fit-content',
-                        padding:'5px',
-                        display:'flex',
-                        flexDirection:'row'
-                    }}>
+                        <div  className="exam-option">
                             <div>
                                 {exam}
                             </div>
@@ -361,13 +337,7 @@ const handleDeleteSubject = (exam) => {
                     </NativeSelect>
 
                 </FormControl>
-                <div style={{
-                    display:'flex',
-                    flexDirection:'row',
-                    maxHeight:'100px',
-                    overflowY:'auto',
-                    flexWrap:'wrap'
-                }}>
+                <div className="subjects-container">
 
                         
 
@@ -377,16 +347,7 @@ const handleDeleteSubject = (exam) => {
                   postState.postSubjects.map((subject) =>
                         (
                         <div>
-                        <div  style={{
-                        background:'#27538b',
-                        marginTop:'1px',
-                        color:'white',
-                        borderRadius:'20px',
-                        width:'fit-content',
-                        padding:'5px',
-                        display:'flex',
-                        flexDirection:'row'
-                    }}>
+                        <div  className="subject-option">
                             <div>
                                 {subject}
                             </div>

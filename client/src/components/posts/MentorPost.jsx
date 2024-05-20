@@ -29,7 +29,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import NativeSelect from '@mui/material/NativeSelect';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import moment from 'moment'
-import { cleanDigitSectionValue } from '@mui/x-date-pickers/internals/hooks/useField/useField.utils';
+import '../../css/mentorPost.css'
 const MentorPost = ({post, mentorName, mentorTagline, mentorImage}) => {
     const navigate = useNavigate()
     const {account}=useContext(DataContext);
@@ -391,14 +391,7 @@ const deletePost = async(postId) => {
   }
     return(
         <>
-            <div style={{
-                display:'flex',
-                flexDirection:'column',
-                padding:'18px',
-                border:'1px solid #c1bcbc',
-                borderRadius:'5px',
-                marginTop:'10px'
-            }}>
+            <div className='post-box'>
                 {/* {
                     postState.postAccountId === account.id?
                     <>
@@ -419,49 +412,12 @@ const deletePost = async(postId) => {
                 }}>
 
                 
-                <div style={{
-                    display: 'block',
-                    minWidth: '70px',
-                    borderRadius:'25px',
-                    background:'#cda8ff',
-                    width:'70px',
-                    height:'70px'
-                   
-                }}>
-                    <img src={mentorImage && mentorImage !== ""?mentorImage:'https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png'}alt="Mentor Image" style={{
-                   
-                    display: 'block',     
-                    width: '100%',
-                    minWidth: '100%',
-                    height: '100%',
-                    minHeight: '100%',
-                    borderWidth: '0px',
-                    outline: 'none' ,
-                    borderRadius:'60px',
-                    objectFit:'cover'
-                    // display: 'block',     
-                    // width: '100%',
-                    // minWidth: '100%',
-                    // height: '100%',
-                    // minHeight: '100%',
-                    // borderWidth: '0px',
-                    // outline: 'none' ,
-                    // borderRadius:'10px'
-            }} />
+                <div className='image-box'>
+                    <img src={mentorImage && mentorImage !== ""?mentorImage:'https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png'}alt="Mentor Image" className='image' />
                 </div>
 
-                <div style={{
-                    display:'flex',
-                    flexDirection:'column',
-                    marginTop:'6px',
-                    marginLeft:'10px'
-                }}>
-                    <div style={{
-                        fontFamily:'DM Sans',
-                        fontSize:'14px',
-                        fontWeight:'700',
-                        color:'black'
-                    }}>
+                <div className='details-container'>
+                    <div className='name'>
                         {mentorName}
                     </div>
                     <div style={{
@@ -527,12 +483,7 @@ const deletePost = async(postId) => {
                 <Dialog open={open} onClose={handleClose}>
                     <DialogTitle>Edit post</DialogTitle>
                     <DialogContent>
-                    <div style={{
-                        display:'flex',
-                        justifyContent:'center',
-                        flexDirection:'column',
-                        marginTop:'10px',
-                        fontSize:'15px'}}>
+                    <div className='dialog-container'>
 
                        
 
@@ -593,13 +544,7 @@ const deletePost = async(postId) => {
                     </NativeSelect>
 
                 </FormControl>
-                <div style={{
-                    display:'flex',
-                    flexDirection:'row',
-                    maxHeight:'100px',
-                    overflowY:'auto',
-                    flexWrap:'wrap'
-                }}>
+                <div className='post-exams-container'>
 
                         
 
@@ -609,16 +554,7 @@ const deletePost = async(postId) => {
                    tempPostState.postExams.map((exam) =>
                         (
                         <div>
-                        <div  style={{
-                        background:'#27538b',
-                        color:'white',
-                        marginTop:'1px',
-                        borderRadius:'20px',
-                        width:'fit-content',
-                        padding:'5px',
-                        display:'flex',
-                        flexDirection:'row'
-                    }}>
+                        <div  className='exam'>
                             <div>
                                 {exam}
                             </div>
@@ -678,13 +614,7 @@ const deletePost = async(postId) => {
                     </NativeSelect>
 
                 </FormControl>
-                <div style={{
-                    display:'flex',
-                    flexDirection:'row',
-                    maxHeight:'100px',
-                    overflowY:'auto',
-                    flexWrap:'wrap'
-                }}>
+                <div className='post-exams-container'>
 
                         
 
@@ -694,16 +624,7 @@ const deletePost = async(postId) => {
                   tempPostState.postSubjects.map((subject) =>
                         (
                         <div>
-                        <div  style={{
-                        background:'#27538b',
-                        marginTop:'1px',
-                        color:'white',
-                        borderRadius:'20px',
-                        width:'fit-content',
-                        padding:'5px',
-                        display:'flex',
-                        flexDirection:'row'
-                    }}>
+                        <div  className='exam'>
                             <div>
                                 {subject}
                             </div>
@@ -828,13 +749,7 @@ const deletePost = async(postId) => {
                     </DialogActions>
              </Dialog>
                 </div>
-                <div style={{
-                    fontSize:'16px',
-                    fontFamily:'DM Sans',
-                    fontWeight:'800',
-                    borderBottom:'2px solid rgb(213 213 213)',
-                    marginTop:'5px'
-                }}>
+                <div className='title'>
                     {postState.postTitle}
 
                 </div>
@@ -853,13 +768,7 @@ const deletePost = async(postId) => {
                     {
                         postState.postBody.split("").length>394&&textLimit===true?
                         <div id='seemore'  onMouseOver={() => {mouseOver()}} onMouseOut={()=>{mouseDown()}}
-                            style={{
-                            display:'inline',
-                            marginLeft:'auto',
-                            marginRight:'0px',
-                            cursor:'pointer',
-                            color:'00000099'
-                        }}
+                            className='seemore-btn'
                         onClick={() => {setLimit(false)}}
                         >
                         ...see more
@@ -876,25 +785,9 @@ const deletePost = async(postId) => {
                     height: '450px',
 
                 }}>
-                    <img src={postState.postImage && postState.postImage !== ""?postState.postImage:'https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png'}alt="Post Image" style={{
-                    width:'100%',
-                    display: 'block',     
-                    width: '100%',
-                    border:'1px solid rgb(213 213 213)',
-                    borderRadius:'5px',
-                    height: '100%',
-                    outline: 'none' ,
-                    
-            }} />
+                    <img src={postState.postImage && postState.postImage !== ""?postState.postImage:'https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png'}alt="Post Image" className='post-image'/>
                 </div>
-                <div style={{
-                    display:'flex',
-                    flexDirection:'row',
-                    fontSize:'12px',
-                    color:"rgba(0, 0, 0, 0.6)",
-                    marginTop:'10px',
-                    
-                }}>
+                <div className='seeliked-btn'>
                 <div style={{
                     cursor:'pointer'
                 }}

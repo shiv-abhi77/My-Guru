@@ -4,6 +4,7 @@ import MentorItem from "./MentorItem"
 import StudentSidebar from "../sidebar/StudentSidebar"
 import { DataContext } from "../../context/DataProvider"
 import { getAccessToken } from "../../utils/util"
+import '../../css/studentMentors.css'
 const StudentMentors = () => {
     const navigate = useNavigate()
     const {account}=useContext(DataContext);
@@ -67,43 +68,14 @@ const StudentMentors = () => {
                                 </div>
                                 
                                 
-                                <div style={{
-                                    display:'flex',
-                                    flexDirection:'row',
-                                    background:'#f2f2f2',
-                                    borderRadius:'5px',
-                                    padding:'5px',
-                                    
-                                }}>
-                                    <div style={{
-                                        borderRadius:'5px',
-                                        border: '1px solid #142683',
-                                        background:'green',
-                                        padding: '5px 5px 5px 5px',
-                                        color:'white',
-                                        fontSize:'16px',
-                                        fontWeight:'500',
-                                        height:'fit-content',
-                                        cursor:'pointer',
-                                    }}
+                                <div className="btns-container">
+                                    <div className="chats-btn"
                                     onClick={() => {navigate(`/student/chats/${e.chatId}`)}}
                                     >
                             Chats
                             </div>
 
-                                    <div style={{
-                                        marginLeft:'auto',
-                                        marginRight:'0px',
-                                        borderRadius:'5px',
-                                        border: '1px solid #142683',
-                                        background:'green',
-                                        padding: '5px 5px 5px 5px',
-                                        color:'white',
-                                        fontSize:'16px',
-                                        fontWeight:'500',
-                                        height:'fit-content',
-                                        cursor:'pointer',
-                                    }}
+                                    <div className="video-call-btn"
                                     onClick={() => {navigate(`/student/video_call/${e.chatId}`)}}
                                     >
                             Video Call

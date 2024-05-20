@@ -1,0 +1,34 @@
+.btns-container{
+    display: flex;
+flex-direction: row;
+background: #f2f2f2;
+border-radius: 5px;
+padding: 5px;
+
+}
+.chats-btn{
+    border-radius: 5px;
+border: 1px solid #142683;
+background: green;
+padding: 5px;
+color: white;
+font-size: 16px;
+font-weight: 500;
+height: fit-content;
+cursor: pointer;
+
+}
+.video-call-btn{
+    margin-left: auto;
+margin-right: 0px;
+border-radius: 5px;
+border: 1px solid #142683;
+background: green;
+padding: 5px;
+color: white;
+font-size: 16px;
+font-weight: 500;
+height: fit-content;
+cursor: pointer;
+
+}

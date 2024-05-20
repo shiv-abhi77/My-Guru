@@ -3,7 +3,7 @@ import { useNavigate, useParams, Link, useLocation } from "react-router-dom"
 import MentorSidebar from "../sidebar/MentorSidebar"
 import { DataContext } from "../../context/DataProvider"
 import { getAccessToken } from "../../utils/util"
-
+import '../../css/mentorStudents.css'
 
 
 const MentorStudents = () => {
@@ -61,61 +61,19 @@ const MentorStudents = () => {
                 data && data.length > 0 ?
                 data.map(e => (
 
-                    <div style={{
-                        display:'flex',
-                        flexDirection:'row',
-                        border:'2px solid #ebe1f0',
-                        borderRadius:'5px',
-                        padding:'5px',
-                        cursor:'pointer',
-                        background:'#c7dff5',
-                        marginTop:'10px'
-                    }}>
+                    <div className="main-box">
 
-                     <div style={{
-                    display: 'block',
-                    minWidth: '40px',
-                    borderRadius:'25px',
-                    background:'#cda8ff',
-                    width:'40px',
-                    height:'40px',
-                    
-                   
-                }}>
-                    <img src={'https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png'}alt="Student Image" style={{
-                   
-                    display: 'block',     
-                    width: '100%',
-                    minWidth: '100%',
-                    height: '100%',
-                    minHeight: '100%',
-                    borderWidth: '0px',
-                    outline: 'none' ,
-                    borderRadius:'60px',
-                    objectFit:'cover'
-                }} />
+                     <div className="image-box">
+                    <img src={'https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png'}alt="Student Image" className="image" />
                 </div>
-                    <div style={{
-                    display:'flex',
-                    flexDirection:'column',
-                    marginLeft:'5px',
-                    flexGrow:2
-                }}
+                    <div className="sub-container"
                 >
                 <div style={{
                     display:'flex',
                     flexDirection:"row",
                     
                 }}>
-                <div style={{
-                    fontSize:'16px',
-                    fontFamily:'DM Sans',
-                    fontWeight:'800',
-                    color:'#566474',
-                    borderRadius:'5px',
-                    padding:'5px',
-                    background:"#dad4f0"
-                }}>
+                <div className="name">
                 {e.studentName}
                 {console.log(e)}
                 </div>
@@ -124,43 +82,14 @@ const MentorStudents = () => {
 
                 </div>
 
-                        <div style={{
-                                    display:'flex',
-                                    flexDirection:'row',
-                                    background:'#f2f2f2',
-                                    borderRadius:'5px',
-                                    padding:'5px',
-                                    
-                                }}>
-                                    <div style={{
-                                        borderRadius:'5px',
-                                        border: '1px solid #142683',
-                                        background:'green',
-                                        padding: '5px 5px 5px 5px',
-                                        color:'white',
-                                        fontSize:'16px',
-                                        fontWeight:'500',
-                                        height:'fit-content',
-                                        cursor:'pointer',
-                                    }}
+                        <div className="btns-container">
+                                    <div className="chats-btn"
                                     onClick={() => {navigate(`/mentor/chats/${e.chatId}`)}}
                                     >
                             Chats
                             </div>
 
-                                    <div style={{
-                                        marginLeft:'auto',
-                                        marginRight:'0px',
-                                        borderRadius:'5px',
-                                        border: '1px solid #142683',
-                                        background:'green',
-                                        padding: '5px 5px 5px 5px',
-                                        color:'white',
-                                        fontSize:'16px',
-                                        fontWeight:'500',
-                                        height:'fit-content',
-                                        cursor:'pointer',
-                                    }}
+                                    <div className="video-call-btn"
                                     onClick={() => {navigate(`/mentor/video_call/${e.chatId}`)}}
                                     >
                             Video Call

@@ -15,6 +15,7 @@ import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import SearchIcon from '@mui/icons-material/Search';
 import NativeSelect from '@mui/material/NativeSelect';
+import '../../css/findMentors.css'
 const FindMentors = () => {
     const {account}=useContext(DataContext);
     const {setAccount} = useContext(DataContext);
@@ -118,14 +119,7 @@ const FindMentors = () => {
                 flexBasis:'60%',
                 
                 }}>
-                    <div style={{
-                        display:'flex',
-                        flexDirection:'row',
-                        width:'100%',
-                        position:'sticky',
-                        top:64
-                        
-                    }}>
+                    <div className="search-container">
                     <TextField
                     onChange={(e) => {setFilter({...filter, searchQuery:e.target.value}); console.log(filter)}}
                     inputProps={{
@@ -143,12 +137,7 @@ const FindMentors = () => {
                         }}
                     />
                     
-                    <div style={{
-                        cursor:'pointer',
-                        marginTop:'10px',
-                        marginLeft:-40,
-                        zIndex:1
-                    }}
+                    <div className="icon"
                     onClick={() => {applySearch()}}
                     >
                         <SearchIcon style={{
@@ -178,60 +167,19 @@ const FindMentors = () => {
         }
         </div>
         </div>
-        <div style={{
-                display:'flex',
-                flexDirection:'column',
-                flexBasis:'40%',
-                position:'fixed',
-                top:64,
-                left:'auto',
-                right:'5px',
-                fontFamily:'DM Sans',
-                
-                
-            }}>
+        <div className="filter-container">
 
-                <div style={{
-                    fontSize:'20px',
-                    display:'flex',
-                    flexDirection:'row',
-                    marginTop:'5px',
-                    
-                }}>
+                <div className="top-container">
                 <div>
                 Mentors Filter
                 </div>
 
-                <div style={{
-                    marginRight:'5px',
-                    marginLeft:'auto',
-                    
-                    fontSize:'16px',
-                    fontFamily:'DM Sans',
-                    backgroundColor:'#142683',
-                    borderRadius:'5px',
-                    fontWeight:700,
-                    cursor:'pointer',
-                    padding: '4px 4px 4px 4px',
-                    color:'white'
-                }}
+                <div className="search-btn"
                 onClick={() => {applySearch()}}
                 >
                 
                 Search</div>
-                <div style={{
-                    marginRight:'5px',
-                    marginLeft:'auto',
-                    
-                    fontSize:'16px',
-                    fontFamily:'DM Sans',
-                    backgroundColor:'#142683',
-                    borderRadius:'5px',
-                    fontWeight:700,
-                    cursor:'pointer',
-                    padding: '4px 4px 4px 4px',
-                    color:'white'
-                }}
+                <div className="reset-btn"
                 onClick={() => {setFilter(filterInitial)}}
                 >
                 
@@ -274,12 +222,7 @@ const FindMentors = () => {
                     </NativeSelect>
 
                 </FormControl>
-                <div style={{
-                    display:'flex',
-                    flexDirection:'row',
-                    width:400,
-                    flexWrap:'wrap'
-                }}>
+                <div className="query-exams-container">
 
                         
 
@@ -288,15 +231,7 @@ const FindMentors = () => {
                     filter.queryExams.map((skill) =>
                         (
                         <div>
-                        <div  style={{
-                        background:'black',
-                        color:'white',
-                        borderRadius:'20px',
-                        width:'fit-content',
-                        padding:'5px',
-                        display:'flex',
-                        flexDirection:'row'
-                    }}>
+                        <div  className="exam">
                             <div>
                                 {skill}
                             </div>
@@ -352,12 +287,7 @@ const FindMentors = () => {
                     </NativeSelect>
 
                 </FormControl>
-                <div style={{
-                    display:'flex',
-                    flexDirection:'row',
-                    width:400,
-                    flexWrap:'wrap'
-                }}>
+                <div className="query-exams-container">
 
                         
 
@@ -366,15 +296,7 @@ const FindMentors = () => {
                     filter.querySubjects.map((subject) =>
                         (
                         <div>
-                        <div  style={{
-                        background:'black',
-                        color:'white',
-                        borderRadius:'20px',
-                        width:'fit-content',
-                        padding:'5px',
-                        display:'flex',
-                        flexDirection:'row'
-                    }}>
+                        <div  className="exam">
                             <div>
                                 {subject}
                             </div>

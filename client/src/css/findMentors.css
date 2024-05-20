@@ -1,0 +1,74 @@
+.container{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    font-family: 'DM Sans';
+}
+.search-container{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    position: sticky;
+    top: 64
+}
+.icon{
+    cursor: pointer;
+    margin-top: 10px;
+    margin-left: -40px;
+    z-index: 1;
+}
+.filter-container{
+    display: flex;
+    flex-direction: column;
+    flex-basis: 40%;
+    position: fixed;
+    top: 64; /* Adjust this value as needed */
+    left: auto;
+    right: 5px;
+    font-family: 'DM Sans', sans-serif;
+}
+.top-container{
+    font-size: 20px;
+    display: flex;
+    flex-direction: row;
+    margin-top: 5px;
+}
+.search-btn{
+    margin-right: 5px;
+    margin-left: auto;
+    font-size: 16px;
+    font-family: 'DM Sans', sans-serif;
+    background-color: #142683;
+    border-radius: 5px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 4px;
+    color: white;
+}
+.reset-btn{
+    margin-right: 5px;
+    margin-left: auto;
+    font-size: 16px;
+    font-family: 'DM Sans', sans-serif;
+    background-color: #142683;
+    border-radius: 5px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 4px;
+    color: white;
+}
+.query-exams-container{
+    display: flex;
+    flex-direction: row;
+    width: 400px;
+    flex-wrap: wrap;
+}
+.exam{
+    background: black;
+    color: white;
+    border-radius: 20px;
+    width: fit-content;
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+}

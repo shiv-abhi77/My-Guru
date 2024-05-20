@@ -1,0 +1,47 @@
+.parent-container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    font-family: 'DM Sans', sans-serif;
+}
+.dialog-container{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 10px;
+    font-size: 15px;
+}
+.exams-container{
+    display: flex;
+    flex-direction: row;
+    max-height: 100px;
+    overflow-y: auto;
+    flex-wrap: wrap;
+}
+.exam-option{
+    background: #27538b;
+    color: white;
+    margin-top: 1px;
+    border-radius: 20px;
+    width: fit-content;
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+}
+.subjects-container{
+    display: flex;
+    flex-direction: row;
+    max-height: 100px;
+    overflow-y: auto;
+    flex-wrap: wrap;
+}
+.subject-option{
+    background: #27538b;
+    margin-top: 1px;
+    color: white;
+    border-radius: 20px;
+    width: fit-content;
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+}

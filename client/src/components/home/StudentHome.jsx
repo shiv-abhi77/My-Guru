@@ -22,6 +22,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import { getType } from "../../utils/util";
 import MentorPost from "../posts/MentorPost";
 import StudentSidebar from "../sidebar/StudentSidebar";
+import '../../css/studentHome.css'
 const StudentHome = () =>{
     const {account}=useContext(DataContext);
     const {setAccount} = useContext(DataContext);
@@ -35,12 +36,7 @@ const StudentHome = () =>{
             
           }}>
                 <StudentSidebar/>
-                <div style={{
-                width:'100%',
-                display:'flex',
-                justifyContent:'center',
-                fontFamily:'DM Sans'
-                }}>     
+                <div className="container">     
 
                 <div style={{
                 display:'flex',
@@ -48,16 +44,7 @@ const StudentHome = () =>{
                 width:'100%'
                 }}>
 
-                <div style={{
-                    display:'flex',
-                    flexDirection:'column',
-                    height:'250px',
-                    background:'#97a0d8',
-                    borderRadius:'5px',
-                    justifyContent:"center",
-                    alignItems:'center',
-                    fontFamily:'DM Sans'
-                }}>
+                <div className="sub-container">
 
                     <div style={{
                         fontSize:'40px'
@@ -84,23 +71,10 @@ const StudentHome = () =>{
                     </div>
                 </div>
 
-                <div style={{
-                    display:'flex',
-                    flexDirection:'row',
-                    marginTop:'10px',
-                    padding:'10px',
-                    fontFamily:'DM Sans',
-                    justifyContent:'space-between'
-                }}>
+                <div className="section-row-container">
                 <div>
 
-                        <div style={{
-                            fontSize:'18px',
-                            padding:'5px',
-                            borderRadius:'5px',
-                            background:'aliceblue',
-                            fontWeight:'700'
-                        }}>
+                        <div className="card-heading">
                             Top Experts in AIEEE
                         </div>
 
@@ -115,13 +89,7 @@ const StudentHome = () =>{
                 </div>
 
                 <div>
-                        <div style={{
-                            fontSize:'18px',
-                            padding:'5px',
-                            borderRadius:'5px',
-                            background:'aliceblue',
-                            fontWeight:'700'
-                        }}>
+                        <div className="card-heading">
                             Top Experts in AIEEE
                         </div>
 
@@ -134,13 +102,7 @@ const StudentHome = () =>{
                         </div>
                 </div>
                 <div>
-                        <div style={{
-                            fontSize:'18px',
-                            padding:'5px',
-                            borderRadius:'5px',
-                            background:'aliceblue',
-                            fontWeight:'700'
-                        }}>
+                        <div className="card-heading">
                             Top Experts in AIEEE
                         </div>
 
@@ -155,22 +117,9 @@ const StudentHome = () =>{
 
                 </div>
 
-                <div style={{
-                    display:'flex',
-                    flexDirection:'row',
-                    marginTop:'10px',
-                    padding:'10px',
-                    fontFamily:'DM Sans',
-                    justifyContent:'space-between'
-                }}>
+                <div className="section-row-container">
                 <div>
-                        <div style={{
-                            fontSize:'18px',
-                            padding:'5px',
-                            borderRadius:'5px',
-                            background:'aliceblue',
-                            fontWeight:'700'
-                        }}>
+                        <div className="card-heading">
                             Top Experts in AIEEE
                         </div>
 
@@ -184,13 +133,7 @@ const StudentHome = () =>{
                 </div>
 
                 <div>
-                        <div style={{
-                            fontSize:'18px',
-                            padding:'5px',
-                            borderRadius:'5px',
-                            background:'aliceblue',
-                            fontWeight:'700'
-                        }}>
+                        <div className="card-heading">
                             Top Experts in AIEEE
                         </div>
 
@@ -203,13 +146,7 @@ const StudentHome = () =>{
                         </div>
                 </div>
                 <div>
-                        <div style={{
-                            fontSize:'18px',
-                            padding:'5px',
-                            borderRadius:'5px',
-                            background:'aliceblue',
-                            fontWeight:'700'
-                        }}>
+                        <div className="card-heading">
                             Top Experts in AIEEE
                         </div>
 

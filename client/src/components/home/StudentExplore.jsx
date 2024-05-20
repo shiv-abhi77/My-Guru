@@ -34,6 +34,7 @@ import exams from "../../constants/exams";
 import subjects from "../../constants/subjects";
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
+import '../../css/studentExplore.css'
 const StudentExplore = () => {
     const {account}=useContext(DataContext);
     const {setAccount} = useContext(DataContext);

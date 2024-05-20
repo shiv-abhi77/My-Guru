@@ -1,0 +1,104 @@
+.post-box{
+    display: flex;
+flex-direction: column;
+padding: 18px;
+border: 1px solid #c1bcbc;
+border-radius: 5px;
+margin-top: 10px;
+
+}
+.image-box{
+    display: block;
+min-width: 70px;
+border-radius: 25px;
+background: #cda8ff;
+width: 70px;
+height: 70px;
+
+}
+.image{
+    display: block;
+width: 100%;
+min-width: 100%;
+height: 100%;
+min-height: 100%;
+border-width: 0px;
+outline: none;
+border-radius: 60px;
+object-fit: cover;
+
+}
+.details-container{
+    display: flex;
+flex-direction: column;
+margin-top: 6px;
+margin-left: 10px;
+
+}
+.name{
+    font-family: 'DM Sans';
+font-size: 14px;
+font-weight: 700;
+color: black;
+
+}
+.dialog-container{
+    display: flex;
+justify-content: center;
+flex-direction: column;
+margin-top: 10px;
+font-size: 15px;
+
+}
+.post-exams-container{
+    display: flex;
+flex-direction: row;
+max-height: 100px;
+overflow-y: auto;
+flex-wrap: wrap;
+
+}
+.exam{
+    background: #27538b;
+color: white;
+margin-top: 1px;
+border-radius: 20px;
+width: fit-content;
+padding: 5px;
+display: flex;
+flex-direction: row;
+
+}
+.title{
+    font-size: 16px;
+font-family: 'DM Sans';
+font-weight: 800;
+border-bottom: 2px solid rgb(213, 213, 213);
+margin-top: 5px;
+
+}
+.seemore-btn{
+    display: inline;
+margin-left: auto;
+margin-right: 0px;
+cursor: pointer;
+color: #00000099;
+
+}
+.post-image{
+    width: 100%;
+display: block;
+border: 1px solid rgb(213, 213, 213);
+border-radius: 5px;
+height: 100%;
+outline: none;
+
+}
+.seeliked-btn{
+    display: flex;
+flex-direction: row;
+font-size: 12px;
+color: rgba(0, 0, 0, 0.6);
+margin-top: 10px;
+
+}

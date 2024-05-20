@@ -2,55 +2,21 @@ import { useState, useEffect, useContext } from "react"
 import { useNavigate, useParams, Link } from "react-router-dom"
 import { DataContext } from "../../context/DataProvider"
 import StarIcon from '@mui/icons-material/Star';
-
+import '../../css/mentorItem.css'
 const MentorItem = ({mentor}) => {
     return(
         <>
-            <div style={{
-                display:'flex',
-                flexDirection:'row',
-                cursor:'pointer',
-                marginTop:'10px',
-                background:'#f2f2f2',
-                borderRadius:'5px'
-            }}>
+            <div className="main-box">
 
             {/* Image div start */}
-                <div style={{
-                    display: 'block',
-                    minWidth: '40px',
-                    borderRadius:'25px',
-                    background:'#cda8ff',
-                    width:'40px',
-                    height:'40px',
-                    marginTop:'8px'
-                }}>
-                    <img src={mentor.mentorImage && mentor.mentorImage !== ""?mentor.mentorImage:'https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png'}alt="Mentor Image" style={{
-                   
-                   display: 'block',     
-                   width: '100%',
-                   minWidth: '100%',
-                   height: '100%',
-                   minHeight: '100%',
-                   borderWidth: '0px',
-                   outline: 'none' ,
-                   borderRadius:'60px',
-                   objectFit:'cover'
-           }} />
+                <div className="image-box">
+                    <img src={mentor.mentorImage && mentor.mentorImage !== ""?mentor.mentorImage:'https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png'}alt="Mentor Image" className="image" />
                 
                 </div>
 
                 {/* Image div end */}
                 {/* Mentor content div start */}
-        <div style={{
-            display:'flex',
-            flexDirection:'row',
-            marginTop:'6px',
-            marginLeft:'10px',
-            
-            width:'100%',
-            padding:'8px'
-        }}>
+        <div className="details-container">
 
         
                 <div style={{
@@ -58,12 +24,7 @@ const MentorItem = ({mentor}) => {
                     flexDirection:'column',
                     
                 }}>
-                     <div style={{
-                        fontFamily:'DM Sans',
-                        fontSize:'16px',
-                        fontWeight:'700',
-                        color:'black'
-                    }}>
+                     <div className="name">
                         {mentor.mentorName}
                     </div>
 
@@ -151,14 +112,7 @@ const MentorItem = ({mentor}) => {
                 </div> */}
 
                 </div>
-                <div style={{
-                    marginRight:'5px',
-                    marginLeft:'auto',
-                    display:'flex',
-                    fontFamily:'DM Sans',
-                    fontSize:'20px',
-                    justifyContent:'center'
-                }}>
+                <div className="rating">
                     {mentor.mentorRating}<StarIcon/>
                 </div>
 </div>
