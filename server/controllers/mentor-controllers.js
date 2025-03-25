@@ -122,9 +122,7 @@ export const getAllPostsExceptYoursController = async(request, response) => {
 }
 
 export const createCommentController = async(request, response) => {
-    
     try {
-        
         const newComment = new Comment(request.body);
         await newComment.save();
         let temp = await Post.findOne({_id:request.query.postId});
